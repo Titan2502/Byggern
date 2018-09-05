@@ -1,0 +1,4 @@
+Install guide: Linuz toolchain stuff
+Build script: cd --> makefile .. $ make
+Run scritps: $ make flash
+

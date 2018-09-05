@@ -1,5 +1,5 @@
 # List all source files to be compiled; separate with space
-SOURCE_FILES := uart.c
+SOURCE_FILES := main.c uart.c accessing_memory_test.c
 
 # Set this flag to "yes" (no quotes) to use JTAG; otherwise ISP (SPI) is used
 PROGRAM_WITH_JTAG := yes
@@ -34,6 +34,12 @@ $(BUILD_DIR)/main.hex: $(OBJECT_FILES) | $(BUILD_DIR)
 .PHONY: flash
 flash: $(BUILD_DIR)/main.hex
 	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U flash:w:$(BUILD_DIR)/main.hex:i
+
+.PHONY: fuse
+fuse:
+	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U efuse:w:0xff:m
+	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U hfuse:w:0x19:m
+	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U lfuse:w:0xfd:m
 
 .PHONY: clean
 clean:
