@@ -2,3 +2,5 @@ Install guide: Linuz toolchain stuff
 Build script: cd --> makefile .. $ make
 Run scritps: $ make flash
 
+Avr libraries: 
+https://github.com/vancegroup-mirrors/avr-libc/blob/master/avr-libc/include/avr/iom162.h
