@@ -9,6 +9,7 @@
 #include "uart.h"
 #include "accessing_memory_test.h"
 #include "adc.h"
+#include "joystick.h"
 
 // Definitions
 
@@ -21,9 +22,16 @@ int main()
   SRAM_test();  // Reading and writing to the SRAM
 
   while(1){
-    _delay_ms(500);
-    printf("JOY_X: %d JOY_Y: %d\r" , adc_read(JOY_X)+123, adc_read(JOY_Y)+125);
-    printf("SLIDER_L: %d SLIDER_R: %d\r" , adc_read(SLIDER_L), adc_read(SLIDER_R));
+    _delay_ms(2000);
+    JOY_pos posJoy = getJoystickAnalogPos();
+    SLIDER_pos posSlider = getSliderAnalogPos();
+    printf("JOY_X: %d JOY_Y: %d\r" , posJoy.x, posJoy.y);
+    printf("SLIDER_L: %d SLIDER_R: %d\r" , posSlider.left, posSlider.right);
+    printf("JOYSTICK POSITION: ");
+    getJoystickDirection(10);
+
+
+    // printf("SLIDER_L: %d SLIDER_R: %d\r" , adc_read(SLIDER_L), adc_read(SLIDER_R));
 
     // // USART_Transmit('G', NULL);
     // // printf( "HELLOOOOOOOOOOOOOO\n" );

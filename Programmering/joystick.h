@@ -12,10 +12,10 @@ typedef struct{
   uint8_t right;
 } SLIDER_pos;
 
-typedef struct{
-  uint8_t button_left;
-  uint8_t button_right;
-} BUTTON_pos;
+// typedef struct{
+//   uint8_t button_left;
+//   uint8_t button_right;
+// } BUTTON_pos;
 
 typedef enum {
 	NEUTRAL,
@@ -30,14 +30,16 @@ typedef enum {
 } JOY_dir_t;
 
 // Declare functions
-int mapInput(float analogInput, float minVal, float maxVal, float scale);
+JOY_pos getJoystickAnalogPos(void);
 
-JOY_pos getJoystickPos(float minVal, float maxVal, float scale);
+SLIDER_pos getSliderAnalogPos(void);
 
-SLIDER_pos getSliderPos(float minVal, float maxVal, float scale);
-
-JOY_dir_t getJoystickDirection(int scale, int deadzone);
-
-void calibrateJoystick(void);
+JOY_dir_t getJoystickDirection(int deadzone);
+//
+// SLIDER_pos getSliderPos(float minVal, float maxVal, float scale);
+//
+// JOY_dir_t getJoystickDirection(int scale, int deadzone);
+//
+// void calibrateJoystick(void);
 
 #endif
