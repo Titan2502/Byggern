@@ -10,6 +10,7 @@
 #include "accessing_memory_test.h"
 #include "adc.h"
 #include "joystick.h"
+#include "oled.h"
 
 // Definitions
 
@@ -20,15 +21,17 @@ int main()
   MCUCR |= (1<<SRE);
   // SFIOR |= (1<<XMM2): // Release PC7-PC4 for normal Port Pin function.
   SRAM_test();  // Reading and writing to the SRAM
+  oled_init();  // Initializing OLED
 
   while(1){
     _delay_ms(2000);
-    JOY_pos posJoy = getJoystickAnalogPos();
-    SLIDER_pos posSlider = getSliderAnalogPos();
-    printf("JOY_X: %d JOY_Y: %d\r" , posJoy.x, posJoy.y);
-    printf("SLIDER_L: %d SLIDER_R: %d\r" , posSlider.left, posSlider.right);
-    printf("JOYSTICK POSITION: ");
-    getJoystickDirection(10);
+    //-----------JOYSTICK/SLIDER READ AND PRINT DATA-----------
+    // JOY_pos posJoy = getJoystickAnalogPos();
+    // SLIDER_pos posSlider = getSliderAnalogPos();
+    // printf("JOY_X: %d JOY_Y: %d\r" , posJoy.x, posJoy.y);
+    // printf("SLIDER_L: %d SLIDER_R: %d\r" , posSlider.left, posSlider.right);
+    // printf("JOYSTICK POSITION: ");
+    // getJoystickDirection(10);
 
 
     // printf("SLIDER_L: %d SLIDER_R: %d\r" , adc_read(SLIDER_L), adc_read(SLIDER_R));
