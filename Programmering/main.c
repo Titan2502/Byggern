@@ -22,9 +22,14 @@ int main()
   // SFIOR |= (1<<XMM2): // Release PC7-PC4 for normal Port Pin function.
   SRAM_test();  // Reading and writing to the SRAM
   oled_init();  // Initializing OLED
+  oled_home();
+  oled_ClearScreen();
+  char c = 'c';
 
   while(1){
-    _delay_ms(2000);
+    _delay_ms(1000);
+    oled_print_char(c);
+
     //-----------JOYSTICK/SLIDER READ AND PRINT DATA-----------
     // JOY_pos posJoy = getJoystickAnalogPos();
     // SLIDER_pos posSlider = getSliderAnalogPos();
