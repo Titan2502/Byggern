@@ -23,53 +23,66 @@ void oled_write_data(char addr){
 	*oled_data = addr;
 }
 
-// void oled_reset(void){
-// }
 void oled_home(void){
-	oled_write_command(0x21);
-	oled_write_command(0x00);
-	oled_write_command(0x7f);
-	oled_write_command(0x22);
-	oled_write_command(0x00);
-	oled_write_command(0x07);
-
-	// page
 	oled_write_command(0x00);
 	oled_write_command(0x10);
 	oled_write_command(0xB0);
-
-}
-// void oled_goto_line(uint8_t  line){
-// 	page = line;
-// }
-// // void oled_goto_column(uint8_t  column){
-// // 	if(column <
-// // }
-// void oled_clear_line(uint8_t  line){
-// }
-// void oled_pos(uint8_t  row, uint8_t  column){
-// 	oled_goto_line(row);
-// 	oled_goto_column(column);
-// }
-void oled_print_char(char c){
-	// Each character have 8*1 byte i fonten LARGE. '5' has the int value 53
-	// If we write '0' -' ' it evaluates to 48-32, or the int 16
-	for(int i = 0; i < FONT_WIDTH; i++){
-		oled_write_data(0xff);	// c - ' ' Fordi font begynner på ' ' (Dec = 32) pgm_read_byte(&(font8[c-' '][i]))
-	}
+	page = 0;
+	col = 0;
 }
 
 void oled_ClearScreen(void){
 	for(int page = 0; page < 8; page++){
-		oled_write_command(0xB0 + page);
-		for(int i = 0; i < 128; ++i){
-			oled_write_command(0x00);
-		}
+		oled_clear_page(page);
 	}
 }
 
-// void oled_print(char *c){
-// }
+void oled_reset(void){
+	oled_ClearScreen();
+	oled_home();
+}
+
+void oled_print_char(char c){
+	// Each character have 8*1 byte i fonten LARGE. '5' has the int value 53
+	// If we write '0' -' ' it evaluates to 48-32, or the int 16
+	for(int i = 0; i < FONT_WIDTH; i++){
+		oled_write_data(pgm_read_byte(&(font8[c-' '][i])));	// c - ' ' Fordi font begynner på ' ' (Dec = 32) pgm_read_byte(&(font8[c-' '][i]))
+	}
+	col += 1;
+}
+
+void oled_print(char *c){
+	int i = 0;
+	while(c[i] != '\0'){
+		oled_print_char(c[i]);
+		i++;
+	}
+}
+
+void oled_goto_page(uint8_t  page){
+ 	oled_write_command(0xB0 + page);
+}
+
+void oled_goto_column(uint8_t  column){
+	if(column >= 0 && column <= 127){
+
+	}
+
+}
+
+void oled_clear_page(uint8_t  page){
+	oled_goto_page(page);
+	for(int i = 0; i < 128; ++i){
+		oled_write_data(0x00);
+	}
+}
+// void oled_pos(uint8_t  row, uint8_t  column){
+//
+
+
+
+
+
 
 //Initialization routine for the OLED_
 void oled_init(void)
@@ -119,6 +132,6 @@ void oled_init(void)
 	//  oled_write_command(0x10);
 
 	// //Goto start position
-	oled_ClearScreen();
+	// oled_ClearScreen();
 	printf("...OLED Initializing Complete!\n\r");
 }
