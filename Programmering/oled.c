@@ -32,7 +32,7 @@ void oled_home(void){
 }
 
 void oled_reset(void){
-	oled_ClearScreen();
+	oled_clearScreen();
 	oled_home();
 }
 
@@ -87,10 +87,11 @@ void oled_clear_page(uint8_t  line){
 	}
 }
 
-void oled_ClearScreen(void){
+void oled_clearScreen(void){
 	for(int line = 0; line < 8; line++){
 		oled_clear_page(line);
 	}
+	oled_home();
 }
 
 //Initialization routine for the OLED_

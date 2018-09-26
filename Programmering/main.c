@@ -11,6 +11,7 @@
 #include "adc.h"
 #include "joystick.h"
 #include "oled.h"
+#include "menu.h"
 
 // Definitions
 
@@ -21,23 +22,18 @@ int main()
   MCUCR |= (1<<SRE);
   // SFIOR |= (1<<XMM2): // Release PC7-PC4 for normal Port Pin function.
   SRAM_test();  // Reading and writing to the SRAM
-  oled_init();  // Initializing OLED
-  _delay_ms(500);
-  oled_home();
-  oled_ClearScreen();
-  oled_home();
   char c = 'p';
   char str[] = "ab";
   char *pointer = &str[0];
-
-  oled_pos(6, 0);
-
+  initMenu();
+  oled_init();
+  oled_clearScreen();
+  oled_print(pointer);
 
   while(1){
     _delay_ms(500);
-    // oled_home();
-    oled_print(pointer);
-    // oled_print(pointer);
+
+
 
     //-----------JOYSTICK/SLIDER READ AND PRINT DATA-----------
     // JOY_pos posJoy = getJoystickAnalogPos();
