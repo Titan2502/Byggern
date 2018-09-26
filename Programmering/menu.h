@@ -3,11 +3,12 @@
 #include <stdio.h>
 
 typedef struct{
-  char title[16];
-  char menu1[16];
-  char menu2[16];
-  char menu3[16];
+  char* title;
+  char* menu1;
+  char* menu2;
+  char* menu3;
 } MENU;
+
 
 typedef struct Node {
   MENU menu;

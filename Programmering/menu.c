@@ -1,11 +1,12 @@
 #include <avr/io.h>
 #include <stdlib.h>
-#include <string.h>
 #include "util/delay.h"
 #include "F_CPU.h"
 #include "oled.h"
 #include "joystick.h"
 #include "menu.h"
+#include "menu_names.h"
+
 // ---- Joystick function ---- //
 // JOY_pos getJoystickAnalogPos(void);
 //
@@ -35,10 +36,10 @@ void initMenu(void){
   MENU MainMenu;
 
   // Main menu interface
-  strcpy( MainMenu.title,  "Main Menu");
-  strcpy( MainMenu.menu1,  "Play Game");
-  strcpy( MainMenu.menu2,  "High Scores");
-  strcpy( MainMenu.menu3,  "Settings");
+  MainMenu.title = &MM_title_string;
+  MainMenu.menu1 = &MM_menu1_string;
+  MainMenu.menu2 = &MM_menu2_string;
+  MainMenu.menu3 = &MM_menu3_string;
 
 
   // Sub Menus
@@ -46,24 +47,26 @@ void initMenu(void){
   MENU HighScores;
   MENU Settings;
 
+  printf("Hello1");
   // Play Game interface
-  strcpy( PlayGame.title,  "Empty");
-  strcpy( PlayGame.menu1,  "Empty");
-  strcpy( PlayGame.menu2,  "Empty");
-  strcpy( PlayGame.menu3,  "Empty");
+  MainMenu.title = &PG_title_string;
+  MainMenu.menu1 = &PG_menu1_string;
+  MainMenu.menu2 = &PG_menu2_string;
+  MainMenu.menu3 = &PG_menu3_string;
 
   // High Scores interface
-  strcpy( HighScores.title,  "Empty");
-  strcpy( HighScores.menu1,  "Empty");
-  strcpy( HighScores.menu2,  "Empty");
-  strcpy( HighScores.menu3,  "Empty");
+  MainMenu.title = &HS_title_string;
+  MainMenu.menu1 = &HS_menu1_string;
+  MainMenu.menu2 = &HS_menu2_string;
+  MainMenu.menu3 = &HS_menu3_string;
 
   // Settings interface
-  strcpy( Settings.title,  "Settings");
-  strcpy( Settings.menu1,  "Sensitivity");
-  strcpy( Settings.menu2,  "Brightness");
-  strcpy( Settings.menu3,  "Awesomeness");
+  MainMenu.title = &SETTING_title_string;
+  MainMenu.menu1 = &SETTING_menu1_string;
+  MainMenu.menu2 = &SETTING_menu1_string;
+  MainMenu.menu3 = &SETTING_menu1_string;
 
+  printf("Hello2");
   // Initialize main menu
   Node mainMenuNode   = newNode(MainMenu);
   Node playGameNode   = newNode(PlayGame);
@@ -72,12 +75,15 @@ void initMenu(void){
 
 
   // Addressen til mainMenu.child1 blir satt til addressen settings
-  mainMenuNode.child1 = &PlayGame;
-  mainMenuNode.child2 = &HighScores;
-  // mainMenuNode.child3 = &settingsNode;
-  //
-  //
-  // printf(mainMenuNode.child2->menu.menu1);
+  mainMenuNode.child1 = &playGameNode;
+  mainMenuNode.child2 = &highScoresNode;
+  mainMenuNode.child3 = &settingsNode;
+
+  playGameNode.parent = &mainMenuNode;
+  settingsNode.parent = &mainMenuNode;
+
+  printf("Hello3");
+  printf(mainMenuNode.child1->menu.menu1);
 
 
 

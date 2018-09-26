@@ -25,14 +25,16 @@ int main()
   char c = 'p';
   char str[] = "ab";
   char *pointer = &str[0];
-  initMenu();
   oled_init();
   oled_clearScreen();
-  oled_print(pointer);
+
+
+  initMenu();
+
 
   while(1){
     _delay_ms(500);
-
+    oled_print(pointer);
 
 
     //-----------JOYSTICK/SLIDER READ AND PRINT DATA-----------
