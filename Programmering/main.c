@@ -26,15 +26,18 @@ int main()
   oled_home();
   oled_ClearScreen();
   oled_home();
-  char c = 'c';
-  char str[] = "Hello ";
+  char c = 'p';
+  char str[] = "ab";
   char *pointer = &str[0];
+
+  oled_pos(6, 0);
+
 
   while(1){
     _delay_ms(500);
     // oled_home();
-    // oled_print_char(c);
     oled_print(pointer);
+    // oled_print(pointer);
 
     //-----------JOYSTICK/SLIDER READ AND PRINT DATA-----------
     // JOY_pos posJoy = getJoystickAnalogPos();
