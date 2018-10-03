@@ -4,7 +4,7 @@
 #include <avr/pgmspace.h>
 
 // ---- Main Menu ----
-const char PROGMEM MM_title_string[]  = "Main Menu";
+const char PROGMEM MM_title_string[10]  = "Main Menu";
 const char PROGMEM MM_menu1_string[]  = "Play Game";
 const char PROGMEM MM_menu2_string[]  = "High Scores";
 const char PROGMEM MM_menu3_string[]  = "Settings";

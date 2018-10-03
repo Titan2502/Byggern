@@ -21,5 +21,6 @@ typedef struct Node {
 
 Node newNode(MENU menu);
 void initMenu(void);
+void bufferFromPROGMEM(char* menuString);
 
 #endif

@@ -22,19 +22,14 @@ int main()
   MCUCR |= (1<<SRE);
   // SFIOR |= (1<<XMM2): // Release PC7-PC4 for normal Port Pin function.
   SRAM_test();  // Reading and writing to the SRAM
-  char c = 'p';
   char str[] = "ab";
-  char *pointer = &str[0];
-  oled_init();
-  oled_clearScreen();
-
+  char *strpointer = &str[0];
 
   initMenu();
 
-
   while(1){
     _delay_ms(500);
-    oled_print(pointer);
+    //oled_print(strpointer);
 
 
     //-----------JOYSTICK/SLIDER READ AND PRINT DATA-----------
