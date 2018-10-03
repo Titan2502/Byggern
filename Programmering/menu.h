@@ -18,10 +18,11 @@ typedef struct Node {
 } Node;
 
 
-Node newNode(MENU menu);
 void initMenu(void);
 void constructMenu(Node* currentNode);
 void removeArrow(int line);
 void checkJoystickDirection(void);
+
+
 
 #endif

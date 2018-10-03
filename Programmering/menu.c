@@ -87,7 +87,6 @@ void initMenu(void){
   currentNode = &mainMenuNode;
   constructMenu(currentNode);
 
-
   // printf(mainMenuNode.child1->menu.menu1);
   // oled_print(mainMenuNode.child1->menu.title);
   // constructMenu(mainMenuNode.child3->menu);

@@ -6,8 +6,9 @@
 #include "util/delay.h"
 
 // Include headerfiles
-#include "uart.h"
 //#include "accessing_memory_test.h"
+#include "uart.h"
+
 #include "adc.h"
 #include "joystick.h"
 #include "oled.h"
