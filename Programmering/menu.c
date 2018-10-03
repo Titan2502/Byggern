@@ -9,26 +9,6 @@
 #include "menu.h"
 #include "menu_names.h"
 
-uint8_t arrowPagePos;
-Node* currentNode;
-
-Node newNode(MENU menu){
-  // Assign struct to Node
-  Node node;
-  node.menu = menu;
-
-  // Parent and children
-  node.parent = NULL;
-  node.child1 = NULL;
-  node.child2 = NULL;
-  node.child3 = NULL;
-
-  return(node);
-}
-Node mainMenuNode;
-Node playGameNode;
-Node highScoresNode;
-Node settingsNode;
 
 void initMenu(void){
   oled_init();
@@ -38,10 +18,10 @@ void initMenu(void){
   MENU MainMenu;
 
   // Main menu interface
-  MainMenu.title = &MM_title_string;
-  MainMenu.menu1 = &MM_menu1_string;
-  MainMenu.menu2 = &MM_menu2_string;
-  MainMenu.menu3 = &MM_menu3_string;
+  MainMenu.title = MM_title_string;
+  MainMenu.menu1 = MM_menu1_string;
+  MainMenu.menu2 = MM_menu2_string;
+  MainMenu.menu3 = MM_menu3_string;
 
   // Sub Menus
   MENU PlayGame;
@@ -49,23 +29,22 @@ void initMenu(void){
   MENU Settings;
 
   // Play Game interface
-  PlayGame.title = &PG_title_string;
-  PlayGame.menu1 = &PG_menu1_string;
-  PlayGame.menu2 = &PG_menu2_string;
-  PlayGame.menu3 = &PG_menu3_string;
+  PlayGame.title = PG_title_string;
+  PlayGame.menu1 = PG_menu1_string;
+  PlayGame.menu2 = PG_menu2_string;
+  PlayGame.menu3 = PG_menu3_string;
 
   // High Scores interface
-  HighScores.title = &HS_title_string;
-  HighScores.menu1 = &HS_menu1_string;
-  HighScores.menu2 = &HS_menu2_string;
-  HighScores.menu3 = &HS_menu3_string;
+  HighScores.title = HS_title_string;
+  HighScores.menu1 = HS_menu1_string;
+  HighScores.menu2 = HS_menu2_string;
+  HighScores.menu3 = HS_menu3_string;
 
   // Settings interface
-  currentNode = &mainMenuNode;
-  Settings.title = &SETTING_title_string;
-  Settings.menu1 = &SETTING_menu1_string;
-  Settings.menu2 = &SETTING_menu2_string;
-  Settings.menu3 = &SETTING_menu3_string;
+  Settings.title = SETTING_title_string;
+  Settings.menu1 = SETTING_menu1_string;
+  Settings.menu2 = SETTING_menu2_string;
+  Settings.menu3 = SETTING_menu3_string;
 
   // Initialize main menu
   mainMenuNode   = newNode(MainMenu);
@@ -84,8 +63,7 @@ void initMenu(void){
 
 
   // Making Main Menu
-  currentNode = &mainMenuNode;
-  constructMenu(currentNode);
+  constructMenu(&mainMenuNode);
 
   // printf(mainMenuNode.child1->menu.menu1);
   // oled_print(mainMenuNode.child1->menu.title);
@@ -94,7 +72,6 @@ void initMenu(void){
 
 
 void constructMenu(Node* node){
-  _delay_ms(500);
   // Initialize screen
   oled_clearScreen();
   currentNode = node;
@@ -110,7 +87,7 @@ void constructMenu(Node* node){
   oled_print(node->menu.menu2);
   oled_pos(4,20);
   oled_print(node->menu.menu3);
-
+  _delay_ms(500);
 }
 
 
@@ -134,7 +111,7 @@ void setArrow(int line){
 
 
 void checkJoystickDirection(){
-  JOY_dir_t joyDirection = getJoystickDirection(20);
+  JOY_dir_t joyDirection = getJoystickDirection(50);
   if(joyDirection == UP){
     setArrow(arrowPagePos-1);
   }

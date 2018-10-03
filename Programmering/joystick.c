@@ -27,19 +27,19 @@ JOY_dir_t getJoystickDirection(int deadzone){
 
 	// Neutral, UP, DOWN, RIGH, LEFT
 	if((pos.y > minDeadzone && pos.y < maxDeadzone) && (pos.x > minDeadzone && pos.x < maxDeadzone))
-		{ //printf("NEUTRAL\r");
+		{ printf("NEUTRAL\r");
     return NEUTRAL; }
 	if(pos.y > maxDeadzone && (pos.x > minDeadzone && pos.x < maxDeadzone))
-		{// printf("UP\r");
+		{ printf("UP\r");
     return UP; }
 	if(pos.y < minDeadzone && (pos.x > minDeadzone && pos.x < maxDeadzone))
-		{ //printf("DOWN\r");
+		{ printf("DOWN\r");
     return DOWN; }
 	if(pos.x > maxDeadzone && (pos.y > minDeadzone && pos.y < maxDeadzone))
-		{// printf("RIGHT\r");
+		{ printf("RIGHT\r");
     return RIGHT; }
 	if(pos.x < minDeadzone && (pos.y > minDeadzone && pos.y < maxDeadzone))
-		{//printf("LEFT\r"); 
+		{ printf("LEFT\r"); 
     return LEFT; }
 
 	// Skråposisjoner!

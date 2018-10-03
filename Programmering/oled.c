@@ -52,7 +52,7 @@ void oled_print_char(char c){
 	}
 }
 
-void oled_print(char *c){
+void oled_print(const char *c){
 	int i = 0;
 	while(c[i] != '\0'){
 		oled_print_char(c[i]);
