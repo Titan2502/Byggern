@@ -4,3 +4,6 @@ Run scritps: $ make flash
 
 Avr libraries: 
 https://github.com/vancegroup-mirrors/avr-libc/blob/master/avr-libc/include/avr/iom162.h
+
+Teste av minnne:
+avr-size -C --mcu=atmega162 build/a.out
