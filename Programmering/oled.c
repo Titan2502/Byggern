@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
-#include "util/delay.h"
 #include "F_CPU.h"
+#include "util/delay.h"
 #include "fonts.h"
 #include "oled.h"
 

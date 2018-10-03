@@ -3,11 +3,12 @@
 #include <stdio.h>
 
 typedef struct{
-  const char* title;
-  const char* menu1;
-  const char* menu2;
-  const char* menu3;
+  char* title;
+  char* menu1;
+  char* menu2;
+  char* menu3;
 } MENU;
+
 
 typedef struct Node {
   MENU menu;
@@ -20,8 +21,6 @@ typedef struct Node {
 
 Node newNode(MENU menu);
 void initMenu(void);
-void constructMenu(Node* currentNode);
-void removeArrow(int line);
-void checkJoystickDirection(void);
+char* bufferFromPROGMEM(char* menuString);
 
 #endif
