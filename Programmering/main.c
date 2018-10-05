@@ -13,6 +13,8 @@
 #include "joystick.h"
 #include "oled.h"
 #include "menu.h"
+#include "spi.h"
+#include "MCP2515.h"
 
 // Definitions
 
@@ -20,15 +22,25 @@
 int main()
 {
   USART_Init();
-  MCUCR |= (1<<SRE);
+  MCUCR |= (1<<SRE);  // Init Sram??
   // SFIOR |= (1<<XMM2): // Release PC7-PC4 for normal Port Pin function.
   SRAM_test();  // Reading and writing to the SRAM
-
   initMenu();
+  mcp2515_init();
+
+
 
   while(1){
     checkJoystickDirection();
-    //oled_print(strpointer);
+
+
+
+    //----------- MCP write read Test ------------- //
+    mcp2515_write(MCP_CANCTRL, 0xf1);
+    printf("0x%x\r\n", mcp2515_read(MCP_CANCTRL));
+    _delay_us(100);
+    //----------------------------------------------//
+
 
 
     //-----------JOYSTICK/SLIDER READ AND PRINT DATA-----------

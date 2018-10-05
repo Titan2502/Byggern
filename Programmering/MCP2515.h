@@ -155,6 +155,14 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_MERRF		0x80
 
 // Declare functions used in source
-
+void mcp2515_invokeCommand(void);
+void mcp2515_deselectSS(void);
+void mcp2515_reset(void);
+uint8_t mcp2515_read(uint8_t adress);
+uint8_t mcp2515_init(void);
+void mcp2515_write(uint8_t address, uint8_t data);
+void mcp2515_requestToSend(uint8_t rts_port);
+uint8_t mcp2515_readStatus(void);
+void mcp2515_bitModify(uint8_t address, uint8_t mask, uint8_t data);
 
 #endif
