@@ -9,6 +9,20 @@
 #include "menu.h"
 #include "menu_names.h"
 
+Node newNode(MENU menu){
+  // Assign struct to Node
+  Node node;
+  node.menu = menu;
+
+  // Parent and children
+  node.parent = NULL;
+  node.child1 = NULL;
+  node.child2 = NULL;
+  node.child3 = NULL;
+
+  return node;
+}
+
 
 void initMenu(void){
   oled_init();

@@ -6,9 +6,9 @@
 #include "util/delay.h"
 
 // Include headerfiles
-//#include "accessing_memory_test.h"
-#include "uart.h"
 
+#include "uart.h"
+#include "accessing_memory_test.h"
 #include "adc.h"
 #include "joystick.h"
 #include "oled.h"
@@ -22,7 +22,7 @@ int main()
   USART_Init();
   MCUCR |= (1<<SRE);
   // SFIOR |= (1<<XMM2): // Release PC7-PC4 for normal Port Pin function.
-  // SRAM_test();  // Reading and writing to the SRAM
+  SRAM_test();  // Reading and writing to the SRAM
 
   initMenu();
 
