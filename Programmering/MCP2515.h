@@ -154,6 +154,19 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_WAKIF		0x40
 #define MCP_MERRF		0x80
 
+// Can Message stuff
+#define MCP_TXB0SIDH 0x31
+#define MCP_TXB0SIDL 0x32
+#define MCP_TXB0DLC 0x35
+#define MCP_TXB0D0 0x36
+
+#define MCP_RXB0SIDL 0x62
+#define MCP_RXB1SIDL 0x72
+#define MCP_RXB0DLC 0x65
+#define MCP_RXB1DLC 0x75
+#define MCP_RXB0D0  0x66
+#define MCP_RXB1D0  0x76
+
 // Declare functions used in source
 void mcp2515_invokeCommand(void);
 void mcp2515_deselectSS(void);
@@ -161,7 +174,7 @@ void mcp2515_reset(void);
 uint8_t mcp2515_read(uint8_t adress);
 uint8_t mcp2515_init(void);
 void mcp2515_write(uint8_t address, uint8_t data);
-void mcp2515_requestToSend(uint8_t rts_port);
+void mcp2515_requestToSend(uint8_t TXbufferchar);
 uint8_t mcp2515_readStatus(void);
 void mcp2515_bitModify(uint8_t address, uint8_t mask, uint8_t data);
 

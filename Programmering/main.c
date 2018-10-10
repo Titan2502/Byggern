@@ -15,6 +15,7 @@
 #include "menu.h"
 #include "spi.h"
 #include "MCP2515.h"
+#include "can.h"
 
 // Definitions
 
@@ -27,13 +28,26 @@ int main()
   SRAM_test();  // Reading and writing to the SRAM
   initMenu();
   mcp2515_init();
+  // -------- Enable interrupt ------------
+  DDRE &= ~(1<<PD2);
+  cli();
+  EMCUCR |= (1<<ISC2);
+  GICR |= (1<<INT0);
+  sei();
+  // --------------------------------------
 
-
+  //---------- CAN message ----------------
+  can_init();
+  CAN_msg message;
+  message.id = 321;
+  message.length = 1;
+  message.data[0] = (uint8_t)6;
+  can_message_send(&message);
+  printf("Hello4");
+  // --------------------------------------
 
   while(1){
     checkJoystickDirection();
-
-
 
     //----------- MCP write read Test ------------- //
     mcp2515_write(MCP_CANCTRL, 0xf1);
