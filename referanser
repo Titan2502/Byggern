@@ -7,3 +7,10 @@ https://github.com/vancegroup-mirrors/avr-libc/blob/master/avr-libc/include/avr/
 
 Teste av minnne:
 avr-size -C --mcu=atmega162 build/a.out
+
+BUILD_DIR := build
+TARGET_CPU := atmega128
+TARGET_DEVICE := m2560
+
+/dev/ttyACM0 Serial communication for Node2
+/dev/ttyS0 Serial communication for Node1

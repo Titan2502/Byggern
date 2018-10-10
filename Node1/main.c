@@ -37,12 +37,12 @@ int main()
   // --------------------------------------
 
   //---------- CAN message ----------------
-  can_init();
-  CAN_msg message;
-  message.id = 321;
-  message.length = 1;
-  message.data[0] = (uint8_t)6;
-  can_message_send(&message);
+  // can_init();
+  // CAN_msg message;
+  // message.id = 321;
+  // message.length = 1;
+  // message.data[0] = (uint8_t)6;
+  // can_message_send(&message);
   // --------------------------------------
 
   while(1){
