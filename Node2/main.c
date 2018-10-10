@@ -18,13 +18,13 @@ int main()
   USART_Init();
 
   //---------- CAN message ----------------
-  can_init();
+  // can_init();
   // CAN_msg message;
   // message.id = 321;
   // message.length = 1;
   // message.data[0] = (uint8_t)6;
   // can_message_send(&message);
-  // --------------------------------------
+  // // --------------------------------------
 
   while(1){
     //----------- MCP write read Test ------------- //
@@ -34,8 +34,8 @@ int main()
     //----------------------------------------------//
 
 
-    // // USART_Transmit('G', NULL);
-    // // printf( "HELLOOOOOOOOOOOOOO\n" );
+    USART_Transmit('G', NULL);
+    printf( "HELLOOOOOOOOOOOOOO\n" );
     // printf("ADC test...\n\r");
     // volatile char *ext_ram = (char *) 0x1500;
     // for (uint16_t i = 0; i < 0x200; i++) {
