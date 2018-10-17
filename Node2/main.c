@@ -10,13 +10,22 @@
 #include "uart.h"
 #include "spi.h"
 #include "MCP2515.h"
-#include "can.h"
+// #include "can.h"
 
 
 int main()
 {
   USART_Init();
+  SPI_MasterInit();
 
+
+  // -------- Enable interrupt ------------
+  DDRE &= ~(1<<PD2);
+  cli();
+  // EICRA |= (1<<ISC20);
+  EIMSK |= (1<<INT2);
+  sei();
+  // --------------------------------------
   //---------- CAN message ----------------
   // can_init();
   // CAN_msg message;
@@ -24,18 +33,22 @@ int main()
   // message.length = 1;
   // message.data[0] = (uint8_t)6;
   // can_message_send(&message);
-  // // --------------------------------------
+  // --------------------------------------
+
+  // printf( "Hello1\n" );
+  // printf("0x%x\r\n", SPI_MasterTransReceive(number));
+  // printf( "Hello2\n" );
 
   while(1){
     //----------- MCP write read Test ------------- //
-    // mcp2515_write(MCP_CANCTRL, 0xf1);
-    // printf("0x%x\r\n", mcp2515_read(MCP_CANCTRL));
-    // _delay_us(100);
+    printf("0x%x\r\n", mcp2515_read(MCP_CANCTRL));
+    _delay_ms(300);
     //----------------------------------------------//
-
-
-    USART_Transmit('G', NULL);
-    printf( "HELLOOOOOOOOOOOOOO\n" );
+    // printf("0x%x\r\n", SPI_MasterTransReceive(0x11));
+    // _delay_ms(300);
+    // USART_Transmit('B', NULL);
+    // printf( "Veriy najs\n" );
+    // _delay_ms(100);
     // printf("ADC test...\n\r");
     // volatile char *ext_ram = (char *) 0x1500;
     // for (uint16_t i = 0; i < 0x200; i++) {

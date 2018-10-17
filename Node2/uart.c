@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define FOSC 4915200//Clock speed
+#define FOSC 16000000 //Clock speed
 #define BAUD 9600
 #define MYUBRR FOSC/16/BAUD-1
 
@@ -29,7 +29,7 @@ void USART_Init(){
   UBRR0L = (unsigned char)ubrr;
   /* Enable receiver and transmitter */
   UCSR0B = (1<<RXEN0)|(1<<TXEN0);
-  /* Set frame format: 8data, Litt usikker, 2stop bit */
+  /* Set frame format: 8data, 2stop bit */
   UCSR0C = (1<<USBS0)|(3<<UCSZ00);
   fdevopen(USART_Transmit, USART_Receive);
 }

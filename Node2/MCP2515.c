@@ -7,14 +7,12 @@
 #include "spi.h"
 
 void mcp2515_invokeCommand(void){
-  //PORTB |= (1<<PB4);
-  //_delay_us(1);
-  PORTB &= ~(1<<PB4);
+  PORTB &= ~(1<<PB7);
 }
 
 
 void mcp2515_deselectSS(void){
-  PORTB |= (1<<PB4);
+  PORTB |= (1<<PB7);
 }
 
 

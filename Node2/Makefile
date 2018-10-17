@@ -1,5 +1,5 @@
 # List all source files to be compiled; separate with space
-SOURCE_FILES := main.c uart.c spi.c MCP2515.c can.c
+SOURCE_FILES := main.c uart.c spi.c MCP2515.c
 
 # Set this flag to "yes" (no quotes) to use JTAG; otherwise ISP (SPI) is used
 PROGRAM_WITH_JTAG := yes
@@ -11,7 +11,7 @@ ifeq ($(PROGRAM_WITH_JTAG), yes)
 endif
 
 BUILD_DIR := build
-TARGET_CPU := atmega128
+TARGET_CPU := atmega2560
 TARGET_DEVICE := m2560
 
 
