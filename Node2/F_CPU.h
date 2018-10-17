@@ -1,1 +1,1 @@
-#define F_CPU 4915200
+#define F_CPU 16000000

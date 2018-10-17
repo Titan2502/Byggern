@@ -27,7 +27,8 @@ int main()
   // SFIOR |= (1<<XMM2): // Release PC7-PC4 for normal Port Pin function.
   SRAM_test();  // Reading and writing to the SRAM
   initMenu();
-  mcp2515_init();
+
+
   // -------- Enable interrupt ------------
   DDRE &= ~(1<<PD2);
   cli();
@@ -37,13 +38,27 @@ int main()
   // --------------------------------------
 
   //---------- CAN message ----------------
-  // can_init();
-  // CAN_msg message;
-  // message.id = 321;
-  // message.length = 1;
-  // message.data[0] = (uint8_t)6;
-  // can_message_send(&message);
+  can_init();
+  CAN_msg message;
+  message.id = 321;
+  message.length = 1;
+  message.data[0] = (uint8_t)6;
+  can_message_send(&message);
   // --------------------------------------
+  // CAN_msg msg;
+  // printf("BEFORE---------\r\n");
+  // printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
+  // printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
+  // can_message_send(&message);
+  //
+  // printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
+  // printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
+  // _delay_ms(1000);
+  // msg = can_data_receive();
+  // printf("%d\n", msg.id);
+  // printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
+  // printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
+  // _delay_ms(1000);
 
   while(1){
     checkJoystickDirection();

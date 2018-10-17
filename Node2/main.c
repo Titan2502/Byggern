@@ -10,39 +10,61 @@
 #include "uart.h"
 #include "spi.h"
 #include "MCP2515.h"
-// #include "can.h"
+#include "can.h"
 
 
 int main()
 {
   USART_Init();
-  SPI_MasterInit();
-
-
   // -------- Enable interrupt ------------
   DDRE &= ~(1<<PD2);
   cli();
-  // EICRA |= (1<<ISC20);
-  EIMSK |= (1<<INT2);
+  EIMSK &= ~(1<<INT2);  // Disable interrupt bit
+
+  // Interrupt on falling edge
+  EICRA &= ~(1<<ISC20);
+  EICRA |= (1<<ISC21);
+
+  EIFR |= (1<<INTF2); // Clear interrupt flag
+  EIMSK |= (1<<INT2); // Enable interrupt bit
   sei();
   // --------------------------------------
   //---------- CAN message ----------------
-  // can_init();
-  // CAN_msg message;
-  // message.id = 321;
-  // message.length = 1;
-  // message.data[0] = (uint8_t)6;
+  can_init();
+
+  CAN_msg message;
+  message.id = 321;
+  message.length = 1;
+  message.data[0] = (uint8_t)6;
+  can_message_send(&message);
+  _delay_ms(50);
+
+  // CAN_msg msg;
+  // // --------------------------------------
+  // printf("BEFORE---------\r\n");
+  // printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
+  // printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
   // can_message_send(&message);
-  // --------------------------------------
+  //
+  // printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
+  // printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
+  // _delay_ms(1000);
+  // msg = can_data_receive();
+  // printf("%d\n", msg.id);
+  // printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
+  // printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
+  // _delay_ms(1000);
 
   // printf( "Hello1\n" );
   // printf("0x%x\r\n", SPI_MasterTransReceive(number));
   // printf( "Hello2\n" );
 
   while(1){
+
+
     //----------- MCP write read Test ------------- //
-    printf("0x%x\r\n", mcp2515_read(MCP_CANCTRL));
-    _delay_ms(300);
+    // printf("0x%x\r\n", mcp2515_read(MCP_CANSTAT));
+    // _delay_ms(300);
     //----------------------------------------------//
     // printf("0x%x\r\n", SPI_MasterTransReceive(0x11));
     // _delay_ms(300);

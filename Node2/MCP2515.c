@@ -39,7 +39,7 @@ uint8_t mcp2515_read(uint8_t address){
 uint8_t mcp2515_init(void){
   SPI_MasterInit();
   mcp2515_reset();
-
+  _delay_ms(10);
   // uint8_t adress;
   // mcp2515_read(MCP_CANSTAT);
   // printf("0x%x\r\n",adress);

@@ -35,30 +35,33 @@ CAN_msg can_data_receive(void){
   status = mcp2515_read(MCP_CANINTF);
 
   // Buffer register 0
-  if(!(status & (1 << MCP_RX0IF))){
+  if( (status & MCP_RX0IF) ){
     msg.id = (mcp2515_read(MCP_RXB0SIDH) << 3) | (mcp2515_read(MCP_RXB0SIDL) >>5);
     msg.length = (mcp2515_read(MCP_RXB0DLC) & 0x0F);
     for(uint8_t i=0; i < msg.length; i++){
       msg.data[i] = mcp2515_read(MCP_RXB0D0 + i);
     }
+    mcp2515_bitModify(MCP_CANINTF, MCP_RX0IF, MCP_NO_INT);
   }
 
+
   // Buffer register 1
-  else if(!(status & (1 << MCP_RX1IF))){
+  else if( (status & MCP_RX1IF) ){
     msg.id = (mcp2515_read(MCP_RXB1SIDH) << 3) | (mcp2515_read(MCP_RXB1SIDL) >>5);
     msg.length = (mcp2515_read(MCP_RXB1DLC) & 0x0F);
     for(uint8_t i=0; i < msg.length; i++){
       msg.data[i] = mcp2515_read(MCP_RXB1D0 + i);
     }
+    mcp2515_bitModify(MCP_CANINTF, MCP_RX1IF, MCP_NO_INT);
   }
+
 
   return msg;
 }
 
 
 ISR(INT2_vect){
-  printf("Interrupt enabled");
-  // CAN_msg msg;
-  // msg = can_data_receive();
-  // printf("%d\n", msg.id);
+  CAN_msg msg;
+  msg = can_data_receive();
+  printf("%d\n", msg.data[0]);
 }
