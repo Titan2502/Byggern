@@ -1,7 +1,11 @@
 #include <avr/io.h>
 #include <stdlib.h>
 
+void SRAM_init(void){
+  MCUCR |= (1<<SRE);
+}
 void SRAM_test(void){
+  SRAM_init();
   volatile char *ext_ram = (char *) 0x1800; // Start address for SRAM
   uint16_t ext_ram_size = 0x800;
   // uint16_t ext_ram_size = 0x0A;

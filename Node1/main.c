@@ -23,7 +23,6 @@
 int main()
 {
   USART_Init();
-  MCUCR |= (1<<SRE);  // Init Sram??
   // SFIOR |= (1<<XMM2): // Release PC7-PC4 for normal Port Pin function.
   SRAM_test();  // Reading and writing to the SRAM
   initMenu();
@@ -37,33 +36,21 @@ int main()
   sei();
   // --------------------------------------
 
-  //---------- CAN message ----------------
+
   CAN_msg message;
-  message.id = 321;
-  message.length = 1;
-  message.data[0] = (uint8_t)30;
-  can_message_send(&message);
-  // --------------------------------------
-  // CAN_msg msg;
-  // printf("BEFORE---------\r\n");
-  // printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
-  // printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
-  // can_message_send(&message);
-  //
-  // printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
-  // printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
-  // _delay_ms(1000);
-  // msg = can_data_receive();
-  // printf("%d\n", msg.id);
-  // printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
-  // printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
-  // _delay_ms(1000);
+  message.id = 1;
+  message.length = 2;
+
 
   while(1){
-    can_message_send(&message);
-    _delay_ms(100);
-    checkJoystickDirection();
 
+    _delay_ms(100);
+    JOY_pos pos = getJoystickAnalogPos();
+    message.data[0] = pos.x;
+    message.data[1] = pos.y;
+    can_message_send(&message);
+    printf("X position: %d, Y position: %d\n", message.data[0], message.data[1]);
+    checkJoystickDirection();
     //----------- MCP write read Test ------------- //
     // mcp2515_write(MCP_CANCTRL, 0xf1);
     // printf("0x%x\r\n", mcp2515_read(MCP_CANCTRL));

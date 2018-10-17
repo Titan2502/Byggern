@@ -63,5 +63,5 @@ CAN_msg can_data_receive(void){
 ISR(INT2_vect){
   CAN_msg msg;
   msg = can_data_receive();
-  printf("%d\n", msg.data[0]);
+  printf("X position: %d, Y position: %d\n", msg.data[0], msg.data[1]);
 }
