@@ -27,7 +27,7 @@ int main()
   // SFIOR |= (1<<XMM2): // Release PC7-PC4 for normal Port Pin function.
   SRAM_test();  // Reading and writing to the SRAM
   initMenu();
-
+  can_init();
 
   // -------- Enable interrupt ------------
   DDRE &= ~(1<<PD2);
@@ -38,11 +38,10 @@ int main()
   // --------------------------------------
 
   //---------- CAN message ----------------
-  can_init();
   CAN_msg message;
   message.id = 321;
   message.length = 1;
-  message.data[0] = (uint8_t)6;
+  message.data[0] = (uint8_t)30;
   can_message_send(&message);
   // --------------------------------------
   // CAN_msg msg;
@@ -61,6 +60,8 @@ int main()
   // _delay_ms(1000);
 
   while(1){
+    can_message_send(&message);
+    _delay_ms(100);
     checkJoystickDirection();
 
     //----------- MCP write read Test ------------- //

@@ -11,26 +11,15 @@
 #include "spi.h"
 #include "MCP2515.h"
 #include "can.h"
+#include "interrupt.h"
 
 
 int main()
 {
   USART_Init();
-  // -------- Enable interrupt ------------
-  DDRE &= ~(1<<PD2);
-  cli();
-  EIMSK &= ~(1<<INT2);  // Disable interrupt bit
-
-  // Interrupt on falling edge
-  EICRA &= ~(1<<ISC20);
-  EICRA |= (1<<ISC21);
-
-  EIFR |= (1<<INTF2); // Clear interrupt flag
-  EIMSK |= (1<<INT2); // Enable interrupt bit
-  sei();
-  // --------------------------------------
-  //---------- CAN message ----------------
+  interrupt_init(); // Enable interrupt
   can_init();
+  //---------- CAN message ----------------
 
   CAN_msg message;
   message.id = 321;
