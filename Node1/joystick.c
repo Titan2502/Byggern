@@ -43,14 +43,14 @@ JOY_dir_t getJoystickDirection(int deadzone){
     return LEFT; }
 
 	// Skråposisjoner!
-	// if(pos.y > maxDeadzone && pos.x > maxDeadzone)
-	// 	{ printf("UP-RIGHT\r"); return UP_RIGHT; }
-	// if(pos.y > maxDeadzone && pos.x < minDeadzone)
-	// 	{ printf("UP-LEFT\r"); return UP_LEFT; }
-	// if(pos.y < minDeadzone && pos.x > maxDeadzone)
-	// 	{ printf("DOWN-RIGHT\r"); return DOWN_RIGHT; }
-	// if(pos.y < minDeadzone && pos.x < minDeadzone)
-	// 	{ printf("DOWN-LEFT\r"); return DOWN_LEFT; }
+	if(pos.y > maxDeadzone && pos.x > maxDeadzone)
+		{ printf("UP-RIGHT\r"); return UP_RIGHT; }
+	if(pos.y > maxDeadzone && pos.x < minDeadzone)
+		{ printf("UP-LEFT\r"); return UP_LEFT; }
+	if(pos.y < minDeadzone && pos.x > maxDeadzone)
+		{ printf("DOWN-RIGHT\r"); return DOWN_RIGHT; }
+	if(pos.y < minDeadzone && pos.x < minDeadzone)
+		{ printf("DOWN-LEFT\r"); return DOWN_LEFT; }
 }
 
 

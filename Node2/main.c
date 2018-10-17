@@ -1,17 +1,18 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include <avr/interrupt.h>
-#include "F_CPU.h"
 #include <avr/sleep.h>
-#include "util/delay.h"
 
 // Include headerfiles
 
+#include "F_CPU.h"
+#include "util/delay.h"
+#include "interrupt.h"
 #include "uart.h"
 #include "spi.h"
 #include "MCP2515.h"
 #include "can.h"
-#include "interrupt.h"
+
 
 
 int main()
@@ -19,8 +20,8 @@ int main()
   USART_Init();
   interrupt_init(); // Enable interrupt
   can_init();
-  //---------- CAN message ----------------
 
+  //---------- CAN message ----------------
   CAN_msg message;
   message.id = 321;
   message.length = 1;

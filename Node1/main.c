@@ -1,42 +1,33 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include <avr/interrupt.h>
-#include "F_CPU.h"
 #include <avr/sleep.h>
-#include "util/delay.h"
 
 // Include headerfiles
 
-#include "uart.h"
+#include "F_CPU.h"
+#include "util/delay.h"
+#include "interrupt.h"
 #include "accessing_memory_test.h"
 #include "adc.h"
 #include "joystick.h"
 #include "oled.h"
 #include "menu.h"
+#include "uart.h"
 #include "spi.h"
 #include "MCP2515.h"
 #include "can.h"
-
-// Definitions
 
 
 int main()
 {
   USART_Init();
-  // SFIOR |= (1<<XMM2): // Release PC7-PC4 for normal Port Pin function.
   SRAM_test();  // Reading and writing to the SRAM
   initMenu();
+  interrupt_init();
   can_init();
 
-  // -------- Enable interrupt ------------
-  DDRE &= ~(1<<PD2);
-  cli();
-  EMCUCR |= (1<<ISC2);
-  GICR |= (1<<INT0);
-  sei();
-  // --------------------------------------
-
-
+  // Initializing the size of the message transmitted
   CAN_msg message;
   message.id = 1;
   message.length = 2;
@@ -51,6 +42,11 @@ int main()
     can_message_send(&message);
     printf("X position: %d, Y position: %d\n", message.data[0], message.data[1]);
     checkJoystickDirection();
+
+
+
+
+
     //----------- MCP write read Test ------------- //
     // mcp2515_write(MCP_CANCTRL, 0xf1);
     // printf("0x%x\r\n", mcp2515_read(MCP_CANCTRL));
