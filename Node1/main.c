@@ -41,7 +41,7 @@ int main()
     message.data[1] = pos.y;
     can_message_send(&message);
     printf("X position: %d, Y position: %d\n", message.data[0], message.data[1]);
-    checkJoystickDirection();
+    // checkJoystickDirection();
 
 
 

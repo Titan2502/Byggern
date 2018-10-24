@@ -14,9 +14,11 @@ void pwm_init(void){
 
   // Set OCnA on compare and set to inverting mode
   TCCR3A |= (1<<COM3A0) | (1<<COM3A1);
+
   // Set prescaler to clk/8
   TCCR3B |= (1<<CS31);
   TCCR3B &= ~((1<<CS30) | (1<<CS32));
+
 
   // Defining TOP to be 0x9C3F
   ICR3H = 0x9C;

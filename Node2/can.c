@@ -55,13 +55,5 @@ CAN_msg can_data_receive(void){
     mcp2515_bitModify(MCP_CANINTF, MCP_RX1IF, MCP_NO_INT);
   }
 
-
   return msg;
-}
-
-
-ISR(INT2_vect){
-  CAN_msg msg;
-  msg = can_data_receive();
-  printf("X position: %d, Y position: %d\n", msg.data[0], msg.data[1]);
 }

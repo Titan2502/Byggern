@@ -14,7 +14,7 @@
 #include "can.h"
 #include "pwm.h"
 
-
+volatile uint8_t CAN_MESSAGE_PENDING = 0;
 
 int main()
 {
@@ -22,7 +22,7 @@ int main()
   interrupt_init(); // Enable interrupt
   can_init();
   pwm_init();
-  pwm_set_duty_cycle(255);
+
   //---------- CAN message ----------------
   CAN_msg message;
   message.id = 321;
@@ -51,7 +51,20 @@ int main()
   // printf("0x%x\r\n", SPI_MasterTransReceive(number));
   // printf( "Hello2\n" );
 
+  CAN_msg msg;  // Message received
+
   while(1){
+    if(CAN_MESSAGE_PENDING){
+      CAN_MESSAGE_PENDING = 0;
+      CAN_msg msg;
+      msg = can_data_receive();
+      pwm_set_duty_cycle(msg.data[0]);
+      printf("X position: %d, Y position: %d\n", msg.data[0], msg.data[1]);
+    }
+
+
+
+
 
 
     //----------- MCP write read Test ------------- //
@@ -67,4 +80,8 @@ int main()
 
 
   }
+}
+
+ISR(INT2_vect){
+  CAN_MESSAGE_PENDING = 1;
 }
