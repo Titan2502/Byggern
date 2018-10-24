@@ -11,6 +11,7 @@ void interrupt_init(void){
   EICRA |= (1<<ISC21);
 
   EIFR |= (1<<INTF2); // Clear interrupt flag
+
   EIMSK |= (1<<INT2); // Enable interrupt bit
   sei();
 }

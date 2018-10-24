@@ -12,6 +12,7 @@
 #include "spi.h"
 #include "MCP2515.h"
 #include "can.h"
+#include "pwm.h"
 
 
 
@@ -20,7 +21,8 @@ int main()
   USART_Init();
   interrupt_init(); // Enable interrupt
   can_init();
-
+  pwm_init();
+  pwm_set_duty_cycle(255);
   //---------- CAN message ----------------
   CAN_msg message;
   message.id = 321;
@@ -61,16 +63,7 @@ int main()
     // USART_Transmit('B', NULL);
     // printf( "Veriy najs\n" );
     // _delay_ms(100);
-    // printf("ADC test...\n\r");
-    // volatile char *ext_ram = (char *) 0x1500;
-    // for (uint16_t i = 0; i < 0x200; i++) {
-    //   uint8_t some_value = rand();
-    //   ext_ram[i] = some_value;
-    //   uint8_t retreived_value = ext_ram[i];
-    //   // if (!(i%100)){
-    //   //   printf("Write phase: ext_ram[%4d] = %02X (should be %02X)\n", i, retreived_value, some_value);
-    //   // }
-    // }
+
 
 
   }
