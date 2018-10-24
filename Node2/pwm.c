@@ -12,8 +12,9 @@ void pwm_init(void){
   TCCR3A |= (1<<WGM31);
   TCCR3B |= (1<<WGM32) | (1<<WGM33);
 
-  // Set OCnA on compare and set to inverting mode
-  TCCR3A |= (1<<COM3A0) | (1<<COM3A1);
+  // Set OCnA on compare and set to noninverting mode
+  TCCR3A &= ~(1<<COM3A0);
+  TCCR3A |= (1<<COM3A1);
 
   // Set prescaler to clk/8
   TCCR3B |= (1<<CS31);
@@ -29,11 +30,14 @@ void pwm_init(void){
   OCR3AL = 0xB8;
 
   DDRE |= (1<<DDE3) | (1<<DDE4) | (1<<DDE5); //Pin E3,4,5 defined as output
+
+  // Enable Overflow interrupt (When clock reaches TOP)
+  // TIMSK5 = (1<<TOIE3);
 }
 
 
 void pwm_set_duty_cycle(uint8_t xValue){
-  uint16_t dutyCycle = 1800 + xValue*((4200-1800)/255);
+  uint16_t dutyCycle = 4200 + xValue*((1800-4200)/255);
 
   if( dutyCycle > 4200 ){
     dutyCycle = 4200;
@@ -46,39 +50,3 @@ void pwm_set_duty_cycle(uint8_t xValue){
   OCR3AH = (dutyCycle >> 8);
   OCR3AL = dutyCycle;
 }
-
-// ISR(INT3_vect){
-//
-// }
-
-
-
-
-
-
-// unsigned int TIM16_ReadTCNTn( void ){
-//   unsigned char sreg;
-//   unsigned int i;
-//   /* Save global interrupt flag */
-//   sreg = SREG;
-//   /* Disable interrupts */
-//   __disable_interrupt();
-//   /* Read TCNTn into i */
-//   i = TCNTn;
-//   /* Restore global interrupt flag */
-//   SREG = sreg;
-//   return i;
-// }
-//
-// void TIM16_WriteTCNTn( unsigned int i ){
-//   unsigned char sreg;
-//   unsigned int i;
-//   /* Save global interrupt flag */
-//   sreg = SREG;
-//   /* Disable interrupts */
-//   __disable_interrupt();
-//   /* Set TCNTn to i */
-//   TCNTn = i;
-//   /* Restore global interrupt flag */
-//   SREG = sreg;
-// }
