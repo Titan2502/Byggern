@@ -77,8 +77,6 @@ int main()
     // printf( "Veriy najs\n" );
     // _delay_ms(100);
 
-
-
   }
 }
 
