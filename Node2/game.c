@@ -20,15 +20,16 @@ void game_get_lives(void){
   uint8_t trigger_value = 0x40;
   if(value < trigger_value ){
     stats.lives--;
-    printf("You lost a life! \n\rCurrent lives left: %d", stats.lives);
+    printf("You lost a life!\n\rCurrent lives left: %d\n\r", stats.lives);
     if(stats.lives == 0){
       printf("Out of lives\n\r");
       printf("GAME OVER!");
       // CALL SOME KIND OF TERMINATION!!!
     }
 
+    _delay_ms(1000);    // For bouncing! 1 sec settling time
     // Continue until the ball is removed
     while(adc_ir_read() < trigger_value);
-    _delay_ms(1000);
+
   }
 }
