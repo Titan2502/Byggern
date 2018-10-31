@@ -13,6 +13,8 @@
 #include "MCP2515.h"
 #include "can.h"
 #include "pwm.h"
+#include "adc_ir.h"
+#include "game.h"
 
 volatile uint8_t CAN_MESSAGE_PENDING = 0;
 
@@ -22,6 +24,8 @@ int main()
   interrupt_init(); // Enable interrupt
   can_init();
   pwm_init();
+  adc_ir_init();
+  game_init(3);
 
   //---------- CAN message ----------------
   CAN_msg message;
@@ -54,18 +58,15 @@ int main()
   CAN_msg msg;  // Message received
 
   while(1){
-    if(CAN_MESSAGE_PENDING){
-      CAN_MESSAGE_PENDING = 0;
-      CAN_msg msg;
-      msg = can_data_receive();
-      pwm_set_duty_cycle(msg.data[0]);
-      printf("X position: %d, Y position: %d\n", msg.data[0], msg.data[1]);
-    }
+    // if(CAN_MESSAGE_PENDING){
+    //   CAN_MESSAGE_PENDING = 0;
+    //   CAN_msg msg;
+    //   msg = can_data_receive();
+    //   pwm_set_duty_cycle(msg.data[0]);
+    //   printf("X position: %d, Y position: %d\n", msg.data[0], msg.data[1]);
+    // }
 
-
-
-
-
+    game_get_lives();
 
     //----------- MCP write read Test ------------- //
     // printf("0x%x\r\n", mcp2515_read(MCP_CANSTAT));

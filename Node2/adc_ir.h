@@ -1,7 +1,7 @@
 #ifndef ADC_IR_H
 #define ADC_IR_H
 
-void ir_adc_init(void);
-void read_ir(void);
+void adc_ir_init(void);
+uint8_t adc_ir_read(void);
 
 #endif
