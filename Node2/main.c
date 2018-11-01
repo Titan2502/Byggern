@@ -16,6 +16,8 @@
 #include "adc_ir.h"
 #include "game.h"
 #include "TWI_Master.h"
+#include "dac.h"
+#include "motor.h"
 
 volatile uint8_t CAN_MESSAGE_PENDING = 0;
 
@@ -27,12 +29,13 @@ int main()
   pwm_init();
   adc_ir_init();
   game_init(3);   // 3 Lives
-  TWI_Master_Initialise();
+  dac_init();
+  motor_init();
   // TWCR |= (1<<TWIE);    // enable interrupt
 
 
 
-  //---------- CAN message ----------------
+  //---------- CAN message send back to node 1 ----------------
   CAN_msg message;
   message.id = 321;
   message.length = 1;
@@ -42,16 +45,20 @@ int main()
   // --------------------------------------
 
 
-  CAN_msg msg;  // Message received
+  CAN_msg msg_controller;  // Message received
 
   while(1){
-    // if(CAN_MESSAGE_PENDING){
-    //   CAN_MESSAGE_PENDING = 0;
-    //   CAN_msg msg;
-    //   msg = can_data_receive();
-    //   pwm_set_duty_cycle(msg.data[0]);
-    //   printf("X position: %d, Y position: %d\n", msg.data[0], msg.data[1]);
-    // }
+    if(CAN_MESSAGE_PENDING){
+      CAN_MESSAGE_PENDING = 0;
+      msg_controller = can_data_receive();
+      pwm_set_duty_cycle(msg_controller.data[0]);
+      dac_write(msg_controller.data[3]);
+      printf("Encoder: 0x%x\r\n", motor_readEncoder());
+
+
+      // printf("X position: %d, Y position: %d\n", msg_controller.data[0], msg_controller.data[1]);
+      // printf("Slider Left position: %d, Slider right position: %d\n", msg_controller.data[2], msg_controller.data[3]);
+    }
 
     game_get_lives();
 

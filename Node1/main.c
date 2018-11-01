@@ -27,20 +27,28 @@ int main()
   interrupt_init();
   can_init();
 
-  // Initializing the size of the message transmitted
-  CAN_msg message;
-  message.id = 1;
-  message.length = 2;
+  // Initializing the message containing the controller position
+  CAN_msg msg_controller;
+  msg_controller.id = 1;
+  msg_controller.length = 4;
+
 
 
   while(1){
 
     _delay_ms(100);
-    JOY_pos pos = getJoystickAnalogPos();
-    message.data[0] = pos.x;
-    message.data[1] = pos.y;
-    can_message_send(&message);
-    printf("X position: %d, Y position: %d\n", message.data[0], message.data[1]);
+    JOY_pos pos_joy = getJoystickAnalogPos();
+    SLIDER_pos pos_slider = getSliderAnalogPos();
+
+    msg_controller.data[0] = pos_joy.x;
+    msg_controller.data[1] = pos_joy.y;
+
+    msg_controller.data[2] = pos_slider.left;
+    msg_controller.data[3] = pos_slider.right;
+
+    can_message_send(&msg_controller);
+    printf("X position: %d, Y position: %d\n", msg_controller.data[0], msg_controller.data[1]);
+    printf("Slider Left position: %d, Slider right position: %d\n", msg_controller.data[2], msg_controller.data[3]);
     // checkJoystickDirection();
 
 
@@ -82,3 +90,36 @@ int main()
 
   }
 }
+
+
+
+
+// // Initializing the message containing the joystick position
+// CAN_msg msg_joystick;
+// msg_joystick.id = 1;
+// msg_joystick.length = 2;
+//
+// // Initializing the message containing the slider position
+// CAN_msg msg_slider;
+// msg_slider.id = 2;
+// msg_slider.length = 2;
+//
+//
+//
+// while(1){
+//
+//   _delay_ms(1000);
+//   JOY_pos pos_joy = getJoystickAnalogPos();
+//   SLIDER_pos pos_slider = getSliderAnalogPos();
+//
+//   msg_joystick.data[0] = pos_joy.x;
+//   msg_joystick.data[1] = pos_joy.y;
+//
+//   msg_slider.data[0] = pos_slider.left;
+//   msg_slider.data[1] = pos_slider.right;
+//
+//   can_message_send(&msg_joystick);
+//   can_message_send(&msg_slider);
+//   printf("X position: %d, Y position: %d\n", msg_joystick.data[0], msg_joystick.data[1]);
+//   printf("Slider Left position: %d, Slider right position: %d\n", msg_slider.data[0], msg_slider.data[1]);
+//   // checkJoystickDirection();

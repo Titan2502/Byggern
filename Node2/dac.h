@@ -3,5 +3,6 @@
 #include <stdio.h>
 
 void dac_init(void);
+void dac_write(uint8_t output_byte);
 
 #endif
