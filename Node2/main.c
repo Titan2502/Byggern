@@ -64,7 +64,7 @@ int main()
       // printf("X position: %d, Y position: %d\n", msg_controller.data[0], msg_controller.data[1]);
       // printf("Slider Left position: %d, Slider right position: %d\n", msg_controller.data[2], msg_controller.data[3]);
     }
-    _delay_ms(100);
+    _delay_ms(80);
     game_get_lives();
 
   }
