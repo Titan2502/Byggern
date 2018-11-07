@@ -26,17 +26,17 @@ int main()
   initMenu();
   interrupt_init();
   can_init();
+  init_button();
 
   // Initializing the message containing the controller position
   CAN_msg msg_controller;
   msg_controller.id = 1;
-  msg_controller.length = 4;
+  msg_controller.length = 5;
 
 
 
   while(1){
 
-    _delay_ms(100);
     JOY_pos pos_joy = getJoystickAnalogPos();
     SLIDER_pos pos_slider = getSliderAnalogPos();
 
@@ -46,9 +46,13 @@ int main()
     msg_controller.data[2] = pos_slider.left;
     msg_controller.data[3] = pos_slider.right;
 
+    msg_controller.data[4] = getButton();
+
     can_message_send(&msg_controller);
     printf("X position: %d, Y position: %d\n", msg_controller.data[0], msg_controller.data[1]);
     printf("Slider Left position: %d, Slider right position: %d\n", msg_controller.data[2], msg_controller.data[3]);
+    printf("BUTTON PRESS: %d\n", getButton());
+
     // checkJoystickDirection();
 
 

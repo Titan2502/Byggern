@@ -17,6 +17,16 @@ SLIDER_pos getSliderAnalogPos(void){
   return pos;
 }
 
+void init_button(void){
+  DDRB &= ~(1<<PB0);
+  PORTB |= (1<<PB0);
+}
+
+uint8_t getButton(void){
+  uint8_t joyButton = 0x01 & PINB;
+  return joyButton;
+}
+
 JOY_dir_t getJoystickDirection(int deadzone){
 	JOY_pos pos = getJoystickAnalogPos();
 	int maxVal = 255;

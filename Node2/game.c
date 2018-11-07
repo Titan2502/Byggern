@@ -33,3 +33,19 @@ void game_get_lives(void){
 
   }
 }
+
+void game_solonoid_init(void){
+  DDRL	|= (1 << DDL0);
+  PORTL |= (1 << PL0);
+}
+
+void game_solonoid_check(uint8_t checkbutton){
+  if (checkbutton == 0){
+    PORTL |= (1<<PL0);
+    _delay_ms(20);
+  }
+  if (checkbutton == 1){
+    PORTL &= ~(1<<PL0);
+  }
+
+}

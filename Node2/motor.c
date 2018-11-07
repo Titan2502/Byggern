@@ -1,7 +1,9 @@
 #include <avr/io.h>
+#include "F_CPU.h"
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+#include "motor.h"
 #include "TWI_Master.h"
 #include "dac.h"
 
@@ -27,36 +29,34 @@ void motor_write(uint8_t sliderpos_in){
   uint8_t center = (255/2)+1;
   signed char sliderpos = sliderpos_in; // Changing to signed 8 bit
   sliderpos -= center;
-
   if (sliderpos >= -center && sliderpos < 0){  // Direction negative
     PORTH &= ~(1<<PH1);
     sliderpos *= -1;
     dac_write(sliderpos);
-    printf("Slider pos, neg: %d", sliderpos);
+    //printf("Slider pos, neg: %d\n", sliderpos);
   }
 
   else if (sliderpos >= 0 && sliderpos <= center){ // Direction positive
     PORTH |= (1<<PH1);
     dac_write(sliderpos);
-    printf("Slider pos, pos: %d", sliderpos);
+    //printf("Slider pos, pos: %d\n", sliderpos);
   }
 }
 
-uint16_t motor_readEncoder(void){
-  uint8_t MSB;
-  uint8_t LSB;
+int16_t motor_readEncoder(void){
+  int16_t reading;
 
   PORTH &= ~(1<<PH5);   // Set !OE low to enable output of encoder
   PORTH &= ~(1<<PH3);   // Set SEL low to get high byte
   _delay_us(20);        // Wait about 20 microseconds
-  MSB = PINK;           // Read MSB
+  reading = (PINK<<8);           // Read MSB
   PORTH |= (1<<PH3);    // Set SEL high to get low byte
   _delay_us(20);        // Wait about 20 microseconds
-  LSB = PINK;           // Read LSB
-  motor_reset();        // Toggle !RST to reset encoder
+  reading |= PINK;           // Read LSB
+  //motor_reset();        // Toggle !RST to reset encoder
   PORTH |= (1<<PH5);    // Set !OE high to disable output of encoder
 
-  return ((MSB<<8) | LSB);
+  return reading;
 }
 
 // DO0-7

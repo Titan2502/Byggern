@@ -31,6 +31,7 @@ int main()
   game_init(3);   // 3 Lives
   dac_init();
   motor_init();
+  game_solonoid_init();
   // TWCR |= (1<<TWIE);    // enable interrupt
 
 
@@ -49,18 +50,21 @@ int main()
 
 
   while(1){
+    msg_controller = can_data_receive();
+
     if(CAN_MESSAGE_PENDING){
       CAN_MESSAGE_PENDING = 0;
       msg_controller = can_data_receive();
+
+      game_solonoid_check(msg_controller.data[4]);
       pwm_set_duty_cycle(msg_controller.data[0]);
       motor_write(msg_controller.data[3]);
       printf("Encoder: 0x%x\r\n", motor_readEncoder());
-
-
+      // _delay_ms(50);
       // printf("X position: %d, Y position: %d\n", msg_controller.data[0], msg_controller.data[1]);
       // printf("Slider Left position: %d, Slider right position: %d\n", msg_controller.data[2], msg_controller.data[3]);
     }
-
+    _delay_ms(100);
     game_get_lives();
 
   }

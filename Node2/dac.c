@@ -1,4 +1,4 @@
-#include "DAC.h"
+#include "dac.h"
 #include "TWI_Master.h"
 
 //Set i2c addresses

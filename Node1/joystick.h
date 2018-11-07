@@ -31,11 +31,12 @@ typedef enum {
 
 // Declare functions
 JOY_pos getJoystickAnalogPos(void);
-
 SLIDER_pos getSliderAnalogPos(void);
-
 JOY_dir_t getJoystickDirection(int deadzone);
-//
+uint8_t getButton(void);
+void init_button(void);
+
+
 // SLIDER_pos getSliderPos(float minVal, float maxVal, float scale);
 //
 // JOY_dir_t getJoystickDirection(int scale, int deadzone);
