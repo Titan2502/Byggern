@@ -47,12 +47,13 @@ int main()
 
   CAN_msg msg_controller;  // Message received
 
+
   while(1){
     if(CAN_MESSAGE_PENDING){
       CAN_MESSAGE_PENDING = 0;
       msg_controller = can_data_receive();
       pwm_set_duty_cycle(msg_controller.data[0]);
-      dac_write(msg_controller.data[3]);
+      motor_write(msg_controller.data[3]);
       printf("Encoder: 0x%x\r\n", motor_readEncoder());
 
 

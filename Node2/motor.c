@@ -22,6 +22,25 @@ void motor_reset(void){
   PORTH |= (1<<PH6);
 }
 
+void motor_write(uint8_t sliderpos_in){
+  // Slider pos [0, 255] => [-255/2 , 255/2]
+  uint8_t center = (255/2)+1;
+  signed char sliderpos = sliderpos_in; // Changing to signed 8 bit
+  sliderpos -= center;
+
+  if (sliderpos >= -center && sliderpos < 0){  // Direction negative
+    PORTH &= ~(1<<PH1);
+    sliderpos *= -1;
+    dac_write(sliderpos);
+    printf("Slider pos, neg: %d", sliderpos);
+  }
+
+  else if (sliderpos >= 0 && sliderpos <= center){ // Direction positive
+    PORTH |= (1<<PH1);
+    dac_write(sliderpos);
+    printf("Slider pos, pos: %d", sliderpos);
+  }
+}
 
 uint16_t motor_readEncoder(void){
   uint8_t MSB;
