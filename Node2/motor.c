@@ -3,9 +3,10 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-#include "motor.h"
 #include "TWI_Master.h"
 #include "dac.h"
+#include "motor.h"
+#include "PID_controller.h"
 
 
 void motor_init(void){
@@ -15,7 +16,7 @@ void motor_init(void){
   DDRH |= (1<<PH1) | (1<<PH3) | (1<<PH4) | (1<<PH5) | (1<<PH6);
   PORTH |= (1<<PH4) | (1<<PH1);  // Setting Enable pin and direction pin
   motor_reset();
-  sei();
+  //sei();
 }
 
 void motor_reset(void){
@@ -24,38 +25,47 @@ void motor_reset(void){
   PORTH |= (1<<PH6);
 }
 
-void motor_write(uint8_t sliderpos_in){
-  // Slider pos [0, 255] => [-255/2 , 255/2]
-  uint8_t center = (255/2)+1;
-  signed char sliderpos = sliderpos_in; // Changing to signed 8 bit
-  sliderpos -= center;
-  if (sliderpos >= -center && sliderpos < 0){  // Direction negative
-    PORTH &= ~(1<<PH1);
-    sliderpos *= -1;
-    dac_write(sliderpos);
-    //printf("Slider pos, neg: %d\n", sliderpos);
-  }
-
-  else if (sliderpos >= 0 && sliderpos <= center){ // Direction positive
+void motor_write(int16_t correction){
+  //correction: [-255, 255], positiv verdi: venstre, negative verdi: høyre
+  if (correction >= -255 && correction < 0){
     PORTH |= (1<<PH1);
-    dac_write(sliderpos);
-    //printf("Slider pos, pos: %d\n", sliderpos);
+    dac_write(abs(correction));
+    // printf("Slider pos,to the right: %d\n", abs(correction));
+  }
+  else if (correction > 0 && correction <= 255){
+    PORTH &= ~(1<<PH1);
+    dac_write(correction);
+    // printf("Slider pos,to the left: %d\n", correction);
   }
 }
+
+
+void motor_PID(uint8_t sliderpos, PID_parameters *pid_st){
+  //printf("sliderpos in motor_PID: %d \n", sliderpos);
+  sliderpos = (sliderpos-255)*-1;
+  int16_t reference = (int16_t)(((int32_t)sliderpos)*9393L/255L);
+  int16_t measurement = motor_readEncoder();
+  int16_t correction = PID_controller(reference, measurement, pid_st);
+  motor_write(correction);
+  // printf("Reference: %d\n", reference);
+  //printf("Correction: %d\n", correction);
+}
+
 
 int16_t motor_readEncoder(void){
   int16_t reading;
 
   PORTH &= ~(1<<PH5);   // Set !OE low to enable output of encoder
   PORTH &= ~(1<<PH3);   // Set SEL low to get high byte
-  _delay_us(20);        // Wait about 20 microseconds
+  _delay_us(40);        // Wait about 20 microseconds
   reading = (PINK<<8);           // Read MSB
   PORTH |= (1<<PH3);    // Set SEL high to get low byte
-  _delay_us(20);        // Wait about 20 microseconds
+  _delay_us(40);        // Wait about 20 microseconds
   reading |= PINK;           // Read LSB
   //motor_reset();        // Toggle !RST to reset encoder
   PORTH |= (1<<PH5);    // Set !OE high to disable output of encoder
 
+  printf("\nEncoderValue:  %d\n", reading);
   return reading;
 }
 
