@@ -23,12 +23,13 @@
 
 volatile uint8_t START_GAME = FALSE;
 volatile uint8_t CAN_MESSAGE_PENDING = FALSE;
+volatile uint8_t HIGHSCORES[3] = {0, 0, 0};
 
 int main()
 {
   USART_Init();
   SRAM_test();  // Reading and writing to the SRAM
-  initMenu();
+  initMenu(HIGHSCORES);
   interrupt_init();
   can_init();
   init_button();
@@ -41,7 +42,12 @@ int main()
   CAN_msg msg_receive;
   msg_receive.id = 2;
 
+
   while(1){
+    // printf("HIGHESCORES0: %d\n", HIGHSCORES[0]);
+    // printf("HIGHESCORES1: %d\n", HIGHSCORES[1]);
+    // printf("HIGHESCORES2: %d\n", HIGHSCORES[2]);
+
     if(START_GAME){
       // Do this after PLAY GAME have been chosen in menu
       JOY_pos pos_joy = getJoystickAnalogPos();
@@ -63,6 +69,19 @@ int main()
         if(msg_receive.data[0] == 0){
           START_GAME = FALSE;
           printf("CAN MESSAGE RECIEVED - GAME OVER!! VERDI %d\n");
+          uint8_t current_highscore = msg_receive.data[1];
+          if (current_highscore > HIGHSCORES[0]){
+            HIGHSCORES[0] = current_highscore;
+          }
+          for( int i = 1; i < 3; i++ ){
+            uint8_t temp_hs = HIGHSCORES[i];
+            if (current_highscore > HIGHSCORES[i]){
+              HIGHSCORES[i-1] = temp_hs;
+              HIGHSCORES[i] = current_highscore;
+            }
+            initMenu(HIGHSCORES);
+
+          }
         }
       }
     }
@@ -72,17 +91,21 @@ int main()
       if(menuReturned != NULL){
         if (strcmp(menuReturned, "Easy") == 0){
           msg_transmit.data[3] = 0;
+          START_GAME = TRUE;
         }else if (strcmp(menuReturned, "Medium") == 0){
           msg_transmit.data[3] = 1;
+          START_GAME = TRUE;
         }else if (strcmp(menuReturned, "Hard") == 0){
           msg_transmit.data[3] = 2;
+          START_GAME = TRUE;
         }
-        START_GAME = TRUE;
         printf("%d", msg_transmit.data[3]);
       }
     }
   }
 }
+
+
 
 ISR(INT0_vect){
   CAN_MESSAGE_PENDING = TRUE;

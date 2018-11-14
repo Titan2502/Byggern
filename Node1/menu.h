@@ -23,7 +23,7 @@ typedef enum {
   Hard
 } DIFFICULTY;
 
-void initMenu(void);
+void initMenu(volatile uint8_t HIGHSCORES[]);
 void constructMenu(Node* currentNode);
 void removeArrow(int line);
 void setArrow(int line);

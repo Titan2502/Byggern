@@ -27,6 +27,8 @@ volatile uint8_t FIRST_CAN_MESSAGE = FALSE;
 volatile uint8_t CAN_MESSAGE_PENDING = FALSE;
 volatile uint8_t PID_CHECK_CORRECTION = FALSE;
 volatile uint8_t GAME_OVER = FALSE;
+volatile uint8_t SCORE = 0;
+volatile uint32_t COUNTER = 0;
 
 int main()
 {
@@ -42,7 +44,7 @@ int main()
   //--------- CAN message for communication between node 1 and 2 ---------//
   CAN_msg message_transmit;          // Message send to Node 1
   message_transmit.id = 2;
-  message_transmit.length = 1;
+  message_transmit.length = 2;
 
   CAN_msg msg_receive;   // Message received from Node 1
   // ------------------------------------------------ //
@@ -50,7 +52,13 @@ int main()
   PID_parameters pid_struct;    // Parameters for the regulator
   interrupt_init(); // Enable interrupt
 
+  // char str[10];
+  // sprintf(str,"%d",19);
+  // printf("%s\n", str);
+
+
   while(1){
+    printf("SCORE: %d\n",  SCORE);
     if(CAN_MESSAGE_PENDING){
       CAN_MESSAGE_PENDING = FALSE;
       msg_receive = can_data_receive();
@@ -78,12 +86,15 @@ int main()
     GAME_OVER = game_get_lives();
     if(GAME_OVER){
       message_transmit.data[0] = 0;
+      message_transmit.data[1] = SCORE;
       ADCSRA &= ~(1<<ADSC);
       can_message_send(&message_transmit);
       _delay_ms(500);
       CAN_MESSAGE_PENDING = FALSE;
       FIRST_CAN_MESSAGE = FALSE;
       can_init();
+      SCORE = 0;
+      COUNTER = 0;
     }
   }
 }
@@ -94,4 +105,8 @@ ISR(INT2_vect){
 
 ISR(TIMER1_OVF_vect){
   PID_CHECK_CORRECTION = TRUE;
+  COUNTER += 1;
+  if(PID_CHECK_CORRECTION && FIRST_CAN_MESSAGE && ((COUNTER % 20) == 0)){
+    SCORE += 1;
+  }
 }

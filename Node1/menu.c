@@ -24,7 +24,7 @@ Node newNode(MENU menu){
 }
 
 
-void initMenu(void){
+void initMenu(volatile uint8_t HIGHSCORES[]){
   oled_init();
   oled_clearScreen();   // Clear screen, go to pos (0, 0)
   _delay_ms(500);
@@ -50,9 +50,18 @@ void initMenu(void){
 
   // High Scores interface
   HighScores.title = HS_title_string;
-  HighScores.menu1 = HS_menu1_string;
-  HighScores.menu2 = HS_menu2_string;
-  HighScores.menu3 = HS_menu3_string;
+  char HS1[3], HS2[3], HS3[3];
+  sprintf(HS1, "%d", HIGHSCORES[0]);
+  sprintf(HS2, "%d", HIGHSCORES[1]);
+  sprintf(HS3, "%d", HIGHSCORES[2]);
+
+  printf("HIGHESCORES0: %s\n", HS1);
+  printf("HIGHESCORES1: %s\n", HS2);
+  printf("HIGHESCORES2: %s\n", HS3);
+
+  HighScores.menu1 = HS1;
+  HighScores.menu2 = HS2;
+  HighScores.menu3 = HS3;
 
   // Settings interface
   Settings.title = SETTING_title_string;
