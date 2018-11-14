@@ -11,10 +11,10 @@
 
 void can_init(void){
   mcp2515_init();
-  mcp2515_bitModify(MCP_CANCTRL, MODE_MASK, MODE_NORMAL);  // Switching to loop-back mode
+  mcp2515_bitModify(MCP_CANCTRL, MODE_MASK, MODE_NORMAL);  // Switching to loop-back mode: change MODE_NORMAL to MODE_LOOPBACK
   mcp2515_bitModify(MCP_CANINTE, 0x03, MCP_RX_INT);
-  // bitModify(MCP_RXB0CTRL, 0x60, filteroff??);
-  // bitModify(MCP_RXB0CTRL, 0x04, rolloveroff??);
+  mcp2515_bitModify(MCP_RXB0CTRL, 0x60, MCP_FILTER_OFF);
+  mcp2515_bitModify(MCP_RXB0CTRL, 0x04, MCP_ROLLOVER_OFF);
 }
 
 

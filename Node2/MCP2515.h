@@ -75,6 +75,8 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_TX_MASK		0x54
 
 // Define SPI Instruction Set
+#define MCP_ROLLOVER_OFF 0x00
+#define MCP_FILTER_OFF	0x60
 
 #define MCP_WRITE		0x02
 

@@ -37,42 +37,30 @@ int main()
   dac_init();
   motor_init();
   game_solonoid_init();
-  // PID_timer_enable();
   // TWCR |= (1<<TWIE);    // enable interrupt
 
-  // Initializing the PID_controller
-  /*
-  Ziegler-Nichols: Kp = 0.65*Kc, Ti =0.5*Pc, Td = 0.12*Pc
-  The first step in this method is setting the I and D gains to zero, increasing the P
-  gain until a sustained and stable oscillation (as close as possible) is obtained on the output.
-  Kc: critical gain and Pc: oscillation periode.
-  */
+  //---------  Initializing the PID_controller ---------//
   float kp = 0.022;
   float ki = 0.005;
   float kd = 0.01;
   PID_parameters pid_struct;    // Parameters for the regulator
   PID_init(kp, ki, kd, &pid_struct);
   PID_timer_enable();
-  // ------------------------------------------------ //
+  // ------------------------------------------------- //
 
 
 
-  //--------- CAN message send back to node 1 ---------//
-  CAN_msg message;
-  message.id = 321;
+  //--------- CAN message for communication between node 1 and 2 ---------//
+  CAN_msg message;          // Message send to Node 1
+  message.id = 2;
   message.length = 1;
-  message.data[0] = (uint8_t)6;
-  can_message_send(&message);
-  _delay_ms(50);
+
+  CAN_msg msg_controller;   // Message received from Node 1
   // ------------------------------------------------ //
-
-
-  CAN_msg msg_controller;  // Message received
   interrupt_init(); // Enable interrupt
 
-
   while(1){
-
+    // Recieve controller output from Node 1
     if(CAN_MESSAGE_PENDING){
       CAN_MESSAGE_PENDING = FALSE;
       msg_controller = can_data_receive();
@@ -82,10 +70,7 @@ int main()
       game_solonoid_check(msg_controller.data[4]);
 
 
-      //printf("Encoder: 0x%x\r\n", motor_readEncoder());
-      // printf("X position: %d, Y position: %d\n", msg_controller.data[0], msg_controller.data[1]);
-      // printf("Slider Left position: %d, Slider right position: %d\n", msg_controller.data[2], msg_controller.data[3]);
-      // printf("BUTTON PRESS: %d\n", msg_controller.data[4]);
+
 
     }
 
@@ -137,3 +122,8 @@ ISR(TIMER1_OVF_vect){
 // USART_Transmit('B', NULL);
 // printf( "Veriy najs\n" );
 // _delay_ms(100);
+
+//printf("Encoder: 0x%x\r\n", motor_readEncoder());
+// printf("X position: %d, Y position: %d\n", msg_controller.data[0], msg_controller.data[1]);
+// printf("Slider Left position: %d, Slider right position: %d\n", msg_controller.data[2], msg_controller.data[3]);
+// printf("BUTTON PRESS: %d\n", msg_controller.data[4]);

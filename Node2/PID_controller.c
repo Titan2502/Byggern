@@ -1,4 +1,5 @@
 #include <avr/io.h>
+#include <stdlib.h>
 #include "F_CPU.h"
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -36,10 +37,10 @@ int16_t PID_controller(int16_t reference, int16_t measurement, PID_parameters *p
   int32_t error, p_term, d_term;
   int32_t i_term, temp, correction;
 
-  // printf("measurement inside PID: %d\n", measurement);
-  // printf("reference inside PID: %d\n", reference);
+  printf("measurement inside PID: %d\n", measurement);
+  printf("reference inside PID: %d\n", reference);
   error = reference - measurement;
-  // printf("error inside: %ld\n", error);
+  printf("error inside: %ld\n", error);
   // printf("KP inside PID: %ld\n", pid_st->Kp);
   // printf("KI inside PID: %ld\n", pid_st->Ki);
   // printf("KD inside PID: %ld\n", pid_st->Kd);
@@ -57,23 +58,37 @@ int16_t PID_controller(int16_t reference, int16_t measurement, PID_parameters *p
   p_term = pid_st->Kp * error;
   //p_term = (int32_t)((int32_t)80 * (int32_t)8000);
   // Calculate Iterm and limit integral "runaway": Iterm: Ki*integral(error)
+  printf("pid_st->sumError BEFORE PID: %ld\n", pid_st->sumError);
   temp = pid_st->sumError + error;
-  if(abs(error) < 50 && pid_st->sumError > 10000){
-    PID_reset_int(pid_st);
+  printf("temp inside PID: %ld\n", temp);
+  printf("abs(temp) inside PID: %d\n", abs(temp));
+  printf("abs(error) inside PID: %d\n", abs(error));
+  printf("abs(pid_st->sumError ) inside PID: %d\n", abs(pid_st->sumError));
+
+
+
+  if((abs(error) < 50) && (abs(temp) > 50000)){
+    PID_reset_int(&pid_st);
   }
   if(temp > pid_st->maxSumError){
+    printf("HELLOOOO1!!");
     i_term = MAX_I_TERM;
     pid_st->sumError = pid_st->maxSumError;
   }
   else if(temp < -pid_st->maxSumError){
+    printf("HELLOOOO2!");
     i_term = -MAX_I_TERM;
     pid_st->sumError = -pid_st->maxSumError;
   }
   else{
+    printf("HELLOOOO3!!");
+    printf("TEMP INSIDE: %d\n", temp);
     pid_st->sumError = temp;
+    printf("SUMERROR INSIDE: %d\n", pid_st->sumError);
     i_term = pid_st->Ki * pid_st->sumError;
   }
-
+  printf("pid_st->sumError inside PID: %d\n", pid_st->sumError);
+  // printf("i_term inside PID: %ld\n", i_term);
   // Calculate Dterm: Kd*\dot(error)
   d_term = pid_st->Kd * (pid_st->lastMeasurement - measurement);
 
@@ -89,10 +104,10 @@ int16_t PID_controller(int16_t reference, int16_t measurement, PID_parameters *p
 
   pid_st->lastMeasurement = measurement;    // Store measurement for next iteration
 
-  // printf("p_term inside PID: %ld\n", p_term);
-  // printf("i_term inside PID: %ld\n", i_term);
-  // printf("d_term inside PID: %ld\n", d_term);
-  // printf("correction inside PID: %ld\n\n", correction);
+  printf("p_term inside PID: %ld\n", p_term);
+  printf("i_term inside PID: %ld\n", i_term);
+  printf("d_term inside PID: %ld\n", d_term);
+  printf("correction inside PID: %ld\n\n", correction);
 
   return((int16_t)correction);  // Convert it back to int16_t bit
 }

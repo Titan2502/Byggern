@@ -1,4 +1,5 @@
 #include <avr/io.h>
+#include <stdlib.h>
 #include "F_CPU.h"
 #include <util/delay.h>
 #include <avr/interrupt.h>

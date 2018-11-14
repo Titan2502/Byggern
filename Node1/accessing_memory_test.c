@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <stdlib.h>
+#include "uart.h"
 
 void SRAM_init(void){
   MCUCR |= (1<<SRE);
