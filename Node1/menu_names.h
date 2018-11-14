@@ -11,16 +11,16 @@ const char MM_menu3_string[]  = "Settings";
 
 // ---- Sub Menus ----
 // MENU PlayGame;
-const char PG_title_string[]  = "PlayGame";
-const char PG_menu1_string[]  = "Empty1";
-const char PG_menu2_string[]  = "Empty2";
-const char PG_menu3_string[]  = "Empty3";
+const char PG_title_string[]  = "Difficulty";
+const char PG_menu1_string[]  = "Easy";
+const char PG_menu2_string[]  = "Medium";
+const char PG_menu3_string[]  = "Hard";
 
 // MENU HighScores;
 const char HS_title_string[]  = "HighScores";
-const char HS_menu1_string[]  = "Empty1";
-const char HS_menu2_string[]  = "Empty2";
-const char HS_menu3_string[]  = "Empty3";
+const char HS_menu1_string[]  = "HighScores - Easy";
+const char HS_menu2_string[]  = "HighScores - Medium";
+const char HS_menu3_string[]  = "HighScores - Hard";
 
 // MENU Settings;
 const char SETTING_title_string[]  = "Settings";

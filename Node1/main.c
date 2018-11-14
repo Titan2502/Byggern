@@ -3,8 +3,9 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 
-// Include headerfiles
+#include <string.h>
 
+// Include headerfiles
 #include "F_CPU.h"
 #include "util/delay.h"
 #include "interrupt.h"
@@ -18,6 +19,10 @@
 #include "MCP2515.h"
 #include "can.h"
 
+#define TRUE 1
+#define FALSE 0
+
+volatile uint8_t START_GAME = FALSE;
 
 int main()
 {
@@ -28,32 +33,57 @@ int main()
   can_init();
   init_button();
 
-  // Initializing the message containing the controller position
-  CAN_msg msg_controller;
-  msg_controller.id = 1;
-  msg_controller.length = 5;
+  // Initializing the can messages
+  CAN_msg msg_transmit;
+  msg_transmit.id = 1;
+  msg_transmit.length = 6;
+
+  CAN_msg msg_receive;
+  msg_receive.id = 2;
 
 
 
   while(1){
+    if(START_GAME){
+      // Do this after PLAY GAME have been chosen in menu
+      JOY_pos pos_joy = getJoystickAnalogPos();
+      SLIDER_pos pos_slider = getSliderAnalogPos();
 
-    JOY_pos pos_joy = getJoystickAnalogPos();
-    SLIDER_pos pos_slider = getSliderAnalogPos();
+      msg_transmit.data[0] = pos_joy.x;
+      msg_transmit.data[1] = pos_joy.y;
 
-    msg_controller.data[0] = pos_joy.x;
-    msg_controller.data[1] = pos_joy.y;
+      msg_transmit.data[2] = pos_slider.left;
+      msg_transmit.data[3] = pos_slider.right;
 
-    msg_controller.data[2] = pos_slider.left;
-    msg_controller.data[3] = pos_slider.right;
+      msg_transmit.data[4] = getButton();
 
-    msg_controller.data[4] = getButton();
+      can_message_send(&msg_transmit);
+      printf("X position: %d, Y position: %d\n", msg_transmit.data[0], msg_transmit.data[1]);
+      printf("Slider Left position: %d, Slider right position: %d\n", msg_transmit.data[2], msg_transmit.data[3]);
+      printf("BUTTON PRESS: %d\n", getButton());
+    }
+    else{
+      _delay_ms(100);
+      const char* menuReturned = checkJoystickDirection();
+      if(menuReturned != NULL){
+        if (strcmp(menuReturned, "Easy") == 0){
+          msg_transmit.data[5] = 0;
+        }else if (strcmp(menuReturned, "Medium") == 0){
+          msg_transmit.data[5] = 1;
+        }else if (strcmp(menuReturned, "Hard") == 0){
+          msg_transmit.data[5] = 2;
+        }
+        START_GAME = TRUE;
+        printf("%d", msg_transmit.data[5]);
+      }
 
-    can_message_send(&msg_controller);
-    printf("X position: %d, Y position: %d\n", msg_controller.data[0], msg_controller.data[1]);
-    printf("Slider Left position: %d, Slider right position: %d\n", msg_controller.data[2], msg_controller.data[3]);
-    printf("BUTTON PRESS: %d\n", getButton());
 
-    // checkJoystickDirection();
+
+
+      // if(returnMenu !=)
+    }
+
+    //
 
 
 

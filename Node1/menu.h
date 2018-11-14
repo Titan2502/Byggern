@@ -17,13 +17,18 @@ typedef struct Node {
   struct Node* child3;
 } Node;
 
-
+typedef enum {
+  Easy,
+  Medium,
+  Hard
+} DIFFICULTY;
 
 void initMenu(void);
 void constructMenu(Node* currentNode);
 void removeArrow(int line);
 void setArrow(int line);
-void checkJoystickDirection(void);
+const char* checkJoystickDirection(void);
+// DIFFICULTY checkJoystickDirection(void);
 
 uint8_t arrowPagePos;
 Node* currentNode;

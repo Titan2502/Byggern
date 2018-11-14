@@ -90,7 +90,7 @@ void constructMenu(Node* node){
   oled_clearScreen();
   currentNode = node;
   arrowPagePos = 2;
-  setArrow(2);
+  setArrow(arrowPagePos);
 
   // Construct menu
   oled_pos(0,10);
@@ -124,7 +124,7 @@ void setArrow(int line){
 }
 
 
-void checkJoystickDirection(){
+const char* checkJoystickDirection(){
   JOY_dir_t joyDirection = getJoystickDirection(50);
   if(joyDirection == UP){
     setArrow(arrowPagePos-1);
@@ -139,19 +139,29 @@ void checkJoystickDirection(){
     switch(arrowPagePos){
       case 2:
         if(currentNode->child1 != NULL){
-        constructMenu(currentNode->child1);
+          constructMenu(currentNode->child1);
+        }else{
+          return currentNode->menu.menu1;
         }
+        break;
       case 3:
         if(currentNode->child2 != NULL){
-        constructMenu(currentNode->child2);
+          constructMenu(currentNode->child2);
+        }else{
+          return currentNode->menu.menu2;
         }
+        break;
       case 4:
         if(currentNode->child3 != NULL){
-        constructMenu(currentNode->child3);
+          constructMenu(currentNode->child3);
+        }else{
+          return currentNode->menu.menu3;
         }
+        break;
       default: break;
     }
   }
+  return NULL;
 }
 // getCurrentPosOled()
 

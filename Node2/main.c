@@ -23,7 +23,7 @@
 #define TRUE 1
 #define FALSE 0
 
-
+volatile uint8_t FIRST_CAN_MESSAGE = FALSE;
 volatile uint8_t CAN_MESSAGE_PENDING = FALSE;
 volatile uint8_t PID_CHECK_CORRECTION = FALSE;
 
@@ -58,8 +58,13 @@ int main()
   CAN_msg msg_controller;   // Message received from Node 1
   // ------------------------------------------------ //
   interrupt_init(); // Enable interrupt
-
+  
   while(1){
+
+    // if(FIRST_CAN_MESSAGE){
+    //
+    // }
+
     // Recieve controller output from Node 1
     if(CAN_MESSAGE_PENDING){
       CAN_MESSAGE_PENDING = FALSE;
@@ -68,6 +73,7 @@ int main()
       game_solonoid_check(msg_controller.data[4]);  // Check if button is pushed, if so activate
     }
 
+    // Do PID control
     if(PID_CHECK_CORRECTION){
       PID_CHECK_CORRECTION = FALSE;
       uint8_t sliderposition = msg_controller.data[3];
