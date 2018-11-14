@@ -11,9 +11,9 @@
 #define MAX_I_TERM      (MAX_INT32 / 2)
 
 typedef struct PID_parameters{
-  int32_t Kp;
-  int32_t Ki;
-  int32_t Kd;
+  float Kp;
+  float Ki;
+  float Kd;
   int32_t lastMeasurement;
   int32_t sumError;
   int32_t maxError;

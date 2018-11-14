@@ -41,7 +41,7 @@ int main()
 
   //---------  Initializing the PID_controller ---------//
   float kp = 0.022;
-  float ki = 0.005;
+  float ki = 0.001;
   float kd = 0.01;
   PID_parameters pid_struct;    // Parameters for the regulator
   PID_init(kp, ki, kd, &pid_struct);
@@ -64,14 +64,8 @@ int main()
     if(CAN_MESSAGE_PENDING){
       CAN_MESSAGE_PENDING = FALSE;
       msg_controller = can_data_receive();
-
-      pwm_set_duty_cycle(msg_controller.data[0]);
-      //motor_write(msg_controller.data[3]);
-      game_solonoid_check(msg_controller.data[4]);
-
-
-
-
+      pwm_set_duty_cycle(msg_controller.data[0]);   // map X position to pwm for servo
+      game_solonoid_check(msg_controller.data[4]);  // Check if button is pushed, if so activate
     }
 
     if(PID_CHECK_CORRECTION){

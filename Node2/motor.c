@@ -66,7 +66,6 @@ int16_t motor_readEncoder(void){
   //motor_reset();        // Toggle !RST to reset encoder
   PORTH |= (1<<PH5);    // Set !OE high to disable output of encoder
 
-  printf("\nEncoderValue:  %d\n", reading);
   return reading;
 }
 
