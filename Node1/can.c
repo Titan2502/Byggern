@@ -61,8 +61,8 @@ CAN_msg can_data_receive(void){
 
 
 
-ISR(INT0_vect){
-  CAN_msg msg;
-  msg = can_data_receive();
-  printf("%d\n", msg.id);
-}
+// ISR(INT0_vect){
+//   CAN_msg msg;
+//   msg = can_data_receive();
+//   printf("%d\n", msg.id);
+// }

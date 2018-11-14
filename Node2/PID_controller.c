@@ -9,6 +9,30 @@
 #include "motor.h"
 #include "PID_controller.h"
 
+void PID_init_to_winit(uint8_t difficulty, PID_parameters *pid_struct){
+  float kp, ki, kd;
+  switch (difficulty) {
+    case 0:
+      kp = 0.022;
+      ki = 0.001;
+      kd = 0.01;
+      break;
+    case 1:
+      kp = 0.022;
+      ki = 0.0;
+      kd = 0.0;
+      break;
+    case 2:
+      kp = 0.0002;
+      ki = 0.0;
+      kd = 0.0;
+      break;
+    default: break;
+  }
+  PID_init(kp, ki, kd, pid_struct);
+  PID_timer_enable();
+}
+
 
 void PID_init(float kp, float ki, float kd, PID_parameters *pid){
     pid->Kp = (kp * SCALING_FACTOR);      // Scaling factor for increased accuracy
@@ -30,6 +54,7 @@ void PID_timer_enable(void){
   // TCCR1B |= (1<<CS10) | (1<<CS12);    // prescaling clk/1024
   TIMSK1 |= (1<<TOIE1);   // Overflow Interrupt enable
   TIFR1 &= ~(1<<TOV1);
+  sei();
 }
 
 
@@ -96,10 +121,10 @@ int16_t PID_controller(int16_t reference, int16_t measurement, PID_parameters *p
 
   pid_st->lastMeasurement = measurement;    // Store measurement for next iteration
 
-  // printf("p_term inside PID: %ld\n", p_term);
-  // printf("i_term inside PID: %ld\n", i_term);
-  // printf("d_term inside PID: %ld\n", d_term);
-  // printf("correction inside PID: %ld\n\n", correction);
+  // printf("p_term inside PID: %d\n", p_term);
+  // printf("i_term inside PID: %d\n", i_term);
+  // printf("d_term inside PID: %d\n", d_term);
+  // printf("correction inside PID: %d\n\n", correction);
 
   return((int16_t)correction);  // Convert it back to int16_t bit
 }

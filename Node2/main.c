@@ -26,6 +26,7 @@
 volatile uint8_t FIRST_CAN_MESSAGE = FALSE;
 volatile uint8_t CAN_MESSAGE_PENDING = FALSE;
 volatile uint8_t PID_CHECK_CORRECTION = FALSE;
+volatile uint8_t GAME_OVER = FALSE;
 
 int main()
 {
@@ -37,49 +38,53 @@ int main()
   dac_init();
   motor_init();
   game_solonoid_init();
-  // TWCR |= (1<<TWIE);    // enable interrupt
-
-  //---------  Initializing the PID_controller ---------//
-  float kp = 0.022;
-  float ki = 0.001;
-  float kd = 0.01;
-  PID_parameters pid_struct;    // Parameters for the regulator
-  PID_init(kp, ki, kd, &pid_struct);
-  PID_timer_enable();
-  // ------------------------------------------------- //
-
-
 
   //--------- CAN message for communication between node 1 and 2 ---------//
-  CAN_msg message;          // Message send to Node 1
-  message.id = 2;
-  message.length = 1;
+  CAN_msg message_transmit;          // Message send to Node 1
+  message_transmit.id = 2;
+  message_transmit.length = 1;
 
-  CAN_msg msg_controller;   // Message received from Node 1
+  CAN_msg msg_receive;   // Message received from Node 1
   // ------------------------------------------------ //
+
+  PID_parameters pid_struct;    // Parameters for the regulator
   interrupt_init(); // Enable interrupt
-  
+
   while(1){
-
-    // if(FIRST_CAN_MESSAGE){
-    //
-    // }
-
-    // Recieve controller output from Node 1
     if(CAN_MESSAGE_PENDING){
       CAN_MESSAGE_PENDING = FALSE;
-      msg_controller = can_data_receive();
-      pwm_set_duty_cycle(msg_controller.data[0]);   // map X position to pwm for servo
-      game_solonoid_check(msg_controller.data[4]);  // Check if button is pushed, if so activate
+      msg_receive = can_data_receive();
+      printf("HELLOOO\n");
+
+      // Need this so that PID control starts after first CAN message
+      if(FIRST_CAN_MESSAGE == FALSE){
+        FIRST_CAN_MESSAGE = TRUE;
+        printf("HELLOOO1\n");
+        PID_init_to_winit(msg_receive.data[3], &pid_struct);
+      }
+
+      pwm_set_duty_cycle(msg_receive.data[0]);   // map X position to pwm for servo
+      game_solonoid_check(msg_receive.data[2]);  // Check if button is pushed, if so activate
     }
 
     // Do PID control
-    if(PID_CHECK_CORRECTION){
+    if(PID_CHECK_CORRECTION && FIRST_CAN_MESSAGE){
+      printf("HELLOOO2\n");
       PID_CHECK_CORRECTION = FALSE;
-      uint8_t sliderposition = msg_controller.data[3];
+      uint8_t sliderposition = msg_receive.data[1];
       motor_PID(sliderposition, &pid_struct);
     }
-    game_get_lives();
+
+    GAME_OVER = game_get_lives();
+    if(GAME_OVER){
+      message_transmit.data[0] = 0;
+      ADCSRA &= ~(1<<ADSC);
+      can_message_send(&message_transmit);
+      _delay_ms(500);
+      CAN_MESSAGE_PENDING = FALSE;
+      FIRST_CAN_MESSAGE = FALSE;
+      can_init();
+    }
   }
 }
 
@@ -90,40 +95,3 @@ ISR(INT2_vect){
 ISR(TIMER1_OVF_vect){
   PID_CHECK_CORRECTION = TRUE;
 }
-
-// CAN_msg msg;
-// // --------------------------------------
-// printf("BEFORE---------\r\n");
-// printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
-// printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
-// can_message_send(&message);
-//
-// printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
-// printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
-// _delay_ms(1000);
-// msg = can_data_receive();
-// printf("%d\n", msg.id);
-// printf("CANSTAT: 0x%x\r\n", mcp2515_read(MCP_CANSTAT));
-// printf("CANINFE: 0x%x\r\n", mcp2515_read(MCP_CANINTF));
-// _delay_ms(1000);
-
-// printf( "Hello1\n" );
-// printf("0x%x\r\n", SPI_MasterTransReceive(number));
-// printf( "Hello2\n" );
-
-
-// IN main
-//----------- MCP write read Test ------------- //
-// printf("0x%x\r\n", mcp2515_read(MCP_CANSTAT));
-// _delay_ms(300);
-//----------------------------------------------//
-// printf("0x%x\r\n", SPI_MasterTransReceive(0x11));
-// _delay_ms(300);
-// USART_Transmit('B', NULL);
-// printf( "Veriy najs\n" );
-// _delay_ms(100);
-
-//printf("Encoder: 0x%x\r\n", motor_readEncoder());
-// printf("X position: %d, Y position: %d\n", msg_controller.data[0], msg_controller.data[1]);
-// printf("Slider Left position: %d, Slider right position: %d\n", msg_controller.data[2], msg_controller.data[3]);
-// printf("BUTTON PRESS: %d\n", msg_controller.data[4]);

@@ -7,13 +7,17 @@
 #include "adc_ir.h"
 #include "game.h"
 
+#define TRUE 1
+#define FALSE 0
+
 game_stats stats;
 
 void game_init(uint8_t lives){
   stats.lives = lives;
 }
 
-void game_get_lives(void){
+
+uint8_t game_get_lives(void){
   uint8_t value = adc_ir_read();
   // printf("Value 0x%x\r\n", value);
   // Max 0x8b = 162, Min 0x4 = 4,
@@ -23,15 +27,16 @@ void game_get_lives(void){
     printf("You lost a life!\n\rCurrent lives left: %d\n\r", stats.lives);
     if(stats.lives == 0){
       printf("Out of lives\n\r");
-      printf("GAME OVER!");
+      printf("GAME OVER!\n");
+      return TRUE;
       // CALL SOME KIND OF TERMINATION!!!
     }
 
     _delay_ms(1000);    // For bouncing! 1 sec settling time
     // Continue until the ball is removed
     while(adc_ir_read() < trigger_value);
-
   }
+  return FALSE;
 }
 
 void game_solonoid_init(void){
