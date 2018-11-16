@@ -23,13 +23,13 @@
 
 volatile uint8_t START_GAME = FALSE;
 volatile uint8_t CAN_MESSAGE_PENDING = FALSE;
-volatile uint8_t HIGHSCORES[3] = {0, 0, 0};
+volatile uint8_t HIGHSCORES[3] = {0, 0, 0};     // Store the three best highscores
 
 int main()
 {
   USART_Init();
+  SRAM_init();
   SRAM_test();  // Reading and writing to the SRAM
-  // _delay_ms(1000);
   initMenu(HIGHSCORES);
   interrupt_init();
   can_init();
@@ -45,12 +45,8 @@ int main()
 
 
   while(1){
-    // printf("HIGHESCORES0: %d\n", HIGHSCORES[0]);
-    // printf("HIGHESCORES1: %d\n", HIGHSCORES[1]);
-    // printf("HIGHESCORES2: %d\n", HIGHSCORES[2]);
-
+    // Do this when difficulty is chosen in play game
     if(START_GAME){
-      // Do this after PLAY GAME have been chosen in menu
       JOY_pos pos_joy = getJoystickAnalogPos();
       SLIDER_pos pos_slider = getSliderAnalogPos();
 
@@ -59,10 +55,6 @@ int main()
       msg_transmit.data[2] = getButton();
 
       can_message_send(&msg_transmit);
-
-      // printf("X position: %d\n", msg_transmit.data[0]);
-      // printf("Slider right position: %d\n", msg_transmit.data[1]);
-      // printf("BUTTON PRESS: %d\n", msg_transmit.data[2]);
 
       if(CAN_MESSAGE_PENDING){
         CAN_MESSAGE_PENDING = FALSE;

@@ -12,11 +12,6 @@ typedef struct{
   uint8_t right;
 } SLIDER_pos;
 
-// typedef struct{
-//   uint8_t button_left;
-//   uint8_t button_right;
-// } BUTTON_pos;
-
 typedef enum {
 	NEUTRAL,
 	UP,
@@ -29,18 +24,11 @@ typedef enum {
 	DOWN_LEFT
 } JOY_dir_t;
 
-// Declare functions
 JOY_pos getJoystickAnalogPos(void);
 SLIDER_pos getSliderAnalogPos(void);
 JOY_dir_t getJoystickDirection(int deadzone);
 uint8_t getButton(void);
 void init_button(void);
 
-
-// SLIDER_pos getSliderPos(float minVal, float maxVal, float scale);
-//
-// JOY_dir_t getJoystickDirection(int scale, int deadzone);
-//
-// void calibrateJoystick(void);
 
 #endif

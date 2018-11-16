@@ -18,9 +18,7 @@ const char PG_menu3_string[]  = "Hard";
 
 // MENU HighScores;
 const char HS_title_string[]  = "HighScores";
-const char HS_menu1_string[]  = "HighScores - Easy";
-const char HS_menu2_string[]  = "HighScores - Medium";
-const char HS_menu3_string[]  = "HighScores - Hard";
+
 
 // MENU Settings;
 const char SETTING_title_string[]  = "Settings";

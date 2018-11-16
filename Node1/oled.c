@@ -37,15 +37,12 @@ void oled_reset(void){
 }
 
 void oled_print_char(char c){
-	// Each character have 8*1 byte i fonten LARGE. '5' has the int value 53
-	// If we write '0' -' ' it evaluates to 48-32, or the int 16
 	if(col < 127-FONT_WIDTH){
 		for(int i = 0; i < FONT_WIDTH; i++){
-			oled_write_data(pgm_read_byte(&(font8[c-' '][i])));	// c - ' ' Fordi font begynner på ' ' (Dec = 32) pgm_read_byte(&(font8[c-' '][i]))
+			oled_write_data(pgm_read_byte(&(font8[c-' '][i])));	// c - ' ' Fordi font begynner på ' ' (Dec = 32)
 			col += 1;
 		}
-	}
-	else{
+	}else{
 		page++;
 		oled_pos(page, 0);
 		oled_print_char(c);
@@ -69,7 +66,6 @@ void oled_goto_column(uint8_t  column){
 	if(column >= 0 && column < 128){
 		uint8_t lower_bitmask = 0b00001111;
 		uint8_t higher_bitmask = 0b11110000;
-
 		oled_write_command(0x00 + (lower_bitmask &  column));
 		oled_write_command(0x10 + ((higher_bitmask &  column) >> 4));
 		col = column;
@@ -94,7 +90,7 @@ void oled_clearScreen(void){
 	oled_home();
 }
 
-//Initialization routine for the OLED_
+//Initialization routine for the OLED
 void oled_init(void)
 {
 	printf("Starting OLED Initializing...\n\r");
@@ -134,14 +130,5 @@ void oled_init(void)
 	oled_write_command(0xA6);
 	//Display on
 	oled_write_command(0xAF);
-	//Set page start address
-	// oled_write_command(0xB0);
-	// //Set lower column start address
-	//  oled_write_command(0x00);
-	// //Set higher column start address
-	//  oled_write_command(0x10);
-
-	// //Goto start position
-	// oled_ClearScreen();
 	printf("...OLED Initializing Complete!\n\r");
 }

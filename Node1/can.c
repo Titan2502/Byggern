@@ -11,18 +11,18 @@
 
 void can_init(void){
   mcp2515_init();
-  mcp2515_bitModify(MCP_CANCTRL, MODE_MASK, MODE_NORMAL);  // Switching to loop-back mode
-  mcp2515_bitModify(MCP_CANINTE, 0x03, MCP_RX_INT);
+  mcp2515_bitModify(MCP_CANCTRL, MODE_MASK, MODE_NORMAL); // Switching to loop-back mode
+  mcp2515_bitModify(MCP_CANINTE, 0x03, MCP_RX_INT);       // Enable interrupt
   mcp2515_bitModify(MCP_RXB0CTRL, 0x60, MCP_FILTER_OFF);
   mcp2515_bitModify(MCP_RXB0CTRL, 0x04, MCP_ROLLOVER_OFF);
 }
 
 
 void can_message_send(CAN_msg* msg){
-  mcp2515_bitModify(MCP_TXB0SIDH, 0xFF, (msg->id >> 3));   // Fill the ID register TXBnSIDH
+  mcp2515_bitModify(MCP_TXB0SIDH, 0xFF, (msg->id >> 3)); // Fill the ID register TXBnSIDH
   mcp2515_bitModify(MCP_TXB0SIDL, 0xFF, msg->id << 5);
-  mcp2515_bitModify(MCP_TXB0DLC, 0x0F, msg->length);   // Fill the Data Length register TXBnDLC
-  for(uint8_t i=0; i < msg->length; i++){
+  mcp2515_bitModify(MCP_TXB0DLC, 0x0F, msg->length);    // Fill the Data Length register TXBnDLC
+  for(uint8_t i=0; i < msg->length; i++){               // Fill the Data register
     mcp2515_bitModify(MCP_TXB0D0+i, 0xFF, msg->data[i]);
   }
   mcp2515_requestToSend(MCP_RTS_TX0);
@@ -44,7 +44,6 @@ CAN_msg can_data_receive(void){
     mcp2515_bitModify(MCP_CANINTF, MCP_RX0IF, MCP_NO_INT);
   }
 
-
   // Buffer register 1
   else if( (status & MCP_RX1IF) ){
     msg.id = (mcp2515_read(MCP_RXB1SIDH) << 3) | (mcp2515_read(MCP_RXB1SIDL) >>5);
@@ -54,15 +53,5 @@ CAN_msg can_data_receive(void){
     }
     mcp2515_bitModify(MCP_CANINTF, MCP_RX1IF, MCP_NO_INT);
   }
-
-
   return msg;
 }
-
-
-
-// ISR(INT0_vect){
-//   CAN_msg msg;
-//   msg = can_data_receive();
-//   printf("%d\n", msg.id);
-// }

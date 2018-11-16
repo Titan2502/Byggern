@@ -28,7 +28,6 @@ void constructMenu(Node* currentNode);
 void removeArrow(int line);
 void setArrow(int line);
 const char* checkJoystickDirection(void);
-// DIFFICULTY checkJoystickDirection(void);
 
 uint8_t arrowPagePos;
 Node* currentNode;

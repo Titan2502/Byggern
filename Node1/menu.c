@@ -57,17 +57,6 @@ void initMenu(volatile uint8_t HIGHSCORES[]){
   itoa(HIGHSCORES[1], HS2, 10);
   itoa(HIGHSCORES[2], HS3, 10);
 
-  // sprintf(HS1, "%u", HIGHSCORES[0]);
-  // sprintf(HS2, "%u", HIGHSCORES[1]);
-  // sprintf(HS3, "%u", HIGHSCORES[2]);
-
-  printf("HIGHESCORES0: %s\n", HS1);
-  printf("HIGHESCORES1: %s\n", HS2);
-  printf("HIGHESCORES2: %s\n", HS3);
-
-  // HighScores.menu1 = HIGHSCORES[0];
-  // HighScores.menu2 = HIGHSCORES[1];
-  // HighScores.menu3 = HIGHSCORES[2];
 
   HighScores.menu1 = HS3;
   HighScores.menu2 = HS2;
@@ -94,13 +83,8 @@ void initMenu(volatile uint8_t HIGHSCORES[]){
   highScoresNode.parent = &mainMenuNode;
   settingsNode.parent = &mainMenuNode;
 
-
   // Making Main Menu
   constructMenu(&mainMenuNode);
-
-  // printf(mainMenuNode.child1->menu.menu1);
-  // oled_print(mainMenuNode.child1->menu.title);
-  // constructMenu(mainMenuNode.child3->menu);
 }
 
 
