@@ -66,6 +66,7 @@ int main()
 
         if(CAN_MESSAGE_PENDING){
           CAN_MESSAGE_PENDING = FALSE;
+          ACCESS_STATUS = FALSE;
           msg_receive = can_data_receive();
           if(msg_receive.data[0] == 0){
             START_GAME = FALSE;
