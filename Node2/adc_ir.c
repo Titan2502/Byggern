@@ -21,7 +21,7 @@ uint8_t adc_ir_read(void){
 
   ADCSRA |= (1<<ADSC);   // ADC start Conversion
 
-  while((ADCSRA & (1<<ADSC))){printf("HELLOOO FROM ADCIR\n");}  // Wait until convertion is complete
-
+  while((ADCSRA & (1<<ADSC))){}  // Wait until convertion is complete
+  //  printf("HELLOOO FROM ADCIR\n"); // INSIDE WHILE
   return ADCH;
 }

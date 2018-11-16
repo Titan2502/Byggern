@@ -9,6 +9,7 @@
 #include "menu.h"
 #include "menu_names.h"
 
+
 Node newNode(MENU menu){
   // Assign struct to Node
   Node node;
@@ -50,18 +51,27 @@ void initMenu(volatile uint8_t HIGHSCORES[]){
 
   // High Scores interface
   HighScores.title = HS_title_string;
-  char HS1[3], HS2[3], HS3[3];
-  sprintf(HS1, "%d", HIGHSCORES[0]);
-  sprintf(HS2, "%d", HIGHSCORES[1]);
-  sprintf(HS3, "%d", HIGHSCORES[2]);
+  char HS1[16], HS2[16], HS3[16];
+
+  itoa(HIGHSCORES[0], HS1, 10);
+  itoa(HIGHSCORES[1], HS2, 10);
+  itoa(HIGHSCORES[2], HS3, 10);
+
+  // sprintf(HS1, "%u", HIGHSCORES[0]);
+  // sprintf(HS2, "%u", HIGHSCORES[1]);
+  // sprintf(HS3, "%u", HIGHSCORES[2]);
 
   printf("HIGHESCORES0: %s\n", HS1);
   printf("HIGHESCORES1: %s\n", HS2);
   printf("HIGHESCORES2: %s\n", HS3);
 
-  HighScores.menu1 = HS1;
+  // HighScores.menu1 = HIGHSCORES[0];
+  // HighScores.menu2 = HIGHSCORES[1];
+  // HighScores.menu3 = HIGHSCORES[2];
+
+  HighScores.menu1 = HS3;
   HighScores.menu2 = HS2;
-  HighScores.menu3 = HS3;
+  HighScores.menu3 = HS1;
 
   // Settings interface
   Settings.title = SETTING_title_string;

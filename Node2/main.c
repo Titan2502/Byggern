@@ -52,9 +52,6 @@ int main()
   PID_parameters pid_struct;    // Parameters for the regulator
   interrupt_init(); // Enable interrupt
 
-  // char str[10];
-  // sprintf(str,"%d",19);
-  // printf("%s\n", str);
 
 
   while(1){
@@ -62,12 +59,10 @@ int main()
     if(CAN_MESSAGE_PENDING){
       CAN_MESSAGE_PENDING = FALSE;
       msg_receive = can_data_receive();
-      printf("HELLOOO\n");
 
       // Need this so that PID control starts after first CAN message
       if(FIRST_CAN_MESSAGE == FALSE){
         FIRST_CAN_MESSAGE = TRUE;
-        printf("HELLOOO1\n");
         PID_init_to_winit(msg_receive.data[3], &pid_struct);
       }
 
@@ -77,7 +72,6 @@ int main()
 
     // Do PID control
     if(PID_CHECK_CORRECTION && FIRST_CAN_MESSAGE){
-      printf("HELLOOO2\n");
       PID_CHECK_CORRECTION = FALSE;
       uint8_t sliderposition = msg_receive.data[1];
       motor_PID(sliderposition, &pid_struct);
@@ -92,6 +86,7 @@ int main()
       _delay_ms(500);
       CAN_MESSAGE_PENDING = FALSE;
       FIRST_CAN_MESSAGE = FALSE;
+      game_init(3);   // 3 Lives
       can_init();
       SCORE = 0;
       COUNTER = 0;
@@ -106,7 +101,7 @@ ISR(INT2_vect){
 ISR(TIMER1_OVF_vect){
   PID_CHECK_CORRECTION = TRUE;
   COUNTER += 1;
-  if(PID_CHECK_CORRECTION && FIRST_CAN_MESSAGE && ((COUNTER % 20) == 0)){
+  if(PID_CHECK_CORRECTION && FIRST_CAN_MESSAGE && ((COUNTER % 30) == 0)){
     SCORE += 1;
   }
 }

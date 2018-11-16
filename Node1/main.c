@@ -29,6 +29,7 @@ int main()
 {
   USART_Init();
   SRAM_test();  // Reading and writing to the SRAM
+  // _delay_ms(1000);
   initMenu(HIGHSCORES);
   interrupt_init();
   can_init();
@@ -59,9 +60,9 @@ int main()
 
       can_message_send(&msg_transmit);
 
-      printf("X position: %d\n", msg_transmit.data[0]);
-      printf("Slider right position: %d\n", msg_transmit.data[1]);
-      printf("BUTTON PRESS: %d\n", msg_transmit.data[2]);
+      // printf("X position: %d\n", msg_transmit.data[0]);
+      // printf("Slider right position: %d\n", msg_transmit.data[1]);
+      // printf("BUTTON PRESS: %d\n", msg_transmit.data[2]);
 
       if(CAN_MESSAGE_PENDING){
         CAN_MESSAGE_PENDING = FALSE;
