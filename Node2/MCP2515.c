@@ -40,12 +40,6 @@ uint8_t mcp2515_init(void){
   SPI_MasterInit();
   mcp2515_reset();
   _delay_ms(10);
-  // uint8_t adress;
-  // mcp2515_read(MCP_CANSTAT);
-  // printf("0x%x\r\n",adress);
-  // if( (adress & MODE_MASK) != MODE_NORMAL ){
-  //     printf("ERROR");
-  // }
   return 0;
 }
 
@@ -62,14 +56,7 @@ void mcp2515_write(uint8_t address, uint8_t data){
 void mcp2515_requestToSend(uint8_t TXbuffer){
   mcp2515_invokeCommand();
   SPI_MasterTransReceive(TXbuffer);
-  // switch(rts_port){
-  //   case 0: SPI_MasterTransReceive(MCP_RTS_TX0); break;
-  //   case 1: SPI_MasterTransReceive(MCP_RTS_TX1); break;
-  //   case 2: SPI_MasterTransReceive(MCP_RTS_TX2); break;
-  //   // Include case for MCP_RTS_ALL ???
-  //   default: break;
   mcp2515_deselectSS();
-  // }
 }
 
 

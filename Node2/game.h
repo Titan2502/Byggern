@@ -10,5 +10,4 @@ void game_get_lives(uint8_t *game_status);
 void game_solonoid_init(void);
 void game_solonoid_check(uint8_t checkbutton);
 
-
 #endif

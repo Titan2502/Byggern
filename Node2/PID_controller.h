@@ -25,6 +25,5 @@ void PID_init_to_winit(uint8_t difficulty, PID_parameters *pid_struct);
 void PID_init(float kp, float ki, float kd, PID_parameters *pid);
 void PID_timer_enable(void);
 int16_t PID_controller(int16_t reference, int16_t measurement, PID_parameters *pid_st);
-void PID_reset_int(PID_parameters *pid_st);
 
 #endif

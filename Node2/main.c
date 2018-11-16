@@ -46,16 +46,15 @@ int main()
   message_transmit.length = 2;
 
   CAN_msg msg_receive;   // Message received from Node 1
-  // ------------------------------------------------ //
+  // -------------------------------------------------------------------- //
 
-  PID_parameters pid_struct;    // Parameters for the regulator
-  interrupt_init(); // Enable interrupt
+  PID_parameters pid_struct;                // Struct for parameters for the regulator
+  uint8_t best_score = 0;                   // Store best score for sending back to Node 1
+  uint8_t game_status[2] = {FALSE, FALSE};  // Game_status = {GAME OVER, LOST LIFE}
+  interrupt_init();                         // Enable interrupt
 
-  uint8_t best_score = 0;
-  uint8_t game_status[2] = {FALSE, FALSE};
 
   while(1){
-    // printf("SCORE: %d\n",  SCORE);
     if(CAN_MESSAGE_PENDING){
       CAN_MESSAGE_PENDING = FALSE;
       msg_receive = can_data_receive();
@@ -66,7 +65,6 @@ int main()
         PORTL |= (1<<PL3);
         PID_init_to_winit(msg_receive.data[3], &pid_struct);
       }
-
       pwm_set_duty_cycle(msg_receive.data[0]);   // map X position to pwm for servo
       game_solonoid_check(msg_receive.data[2]);  // Check if button is pushed, if so activate
     }
@@ -78,6 +76,7 @@ int main()
       motor_PID(sliderposition, &pid_struct);
     }
 
+    // Get info about lost life and game over
     game_get_lives(&game_status[0]);
 
     // If we lost a life, store the best score
@@ -85,6 +84,7 @@ int main()
       if(SCORE > best_score){
         best_score = SCORE;
       }
+      // Scores and counter is reset for next try
       SCORE = 0;
       COUNTER = 0;
     }
@@ -93,18 +93,17 @@ int main()
     if(game_status[0]){
       message_transmit.data[0] = 0;
       message_transmit.data[1] = best_score;
-      ADCSRA &= ~(1<<ADSC);
+      ADCSRA &= ~(1<<ADSC);                   // ADC Stop Conversion
       can_message_send(&message_transmit);
       _delay_ms(500);
       CAN_MESSAGE_PENDING = FALSE;
       FIRST_CAN_MESSAGE = FALSE;
-      PORTL &= ~(1<<PL3);   // Indikation for the Arduino for game reset
-      game_init(3);   // 3 Lives
+      PORTL &= ~(1<<PL3);                     // Indikation for the Arduino for game reset
+      game_init(3);                           // Setting lives equal to  3
       can_init();
       SCORE = 0;
       COUNTER = 0;
     }
-
   }
 }
 

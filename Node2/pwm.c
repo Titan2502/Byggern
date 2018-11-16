@@ -29,23 +29,19 @@ void pwm_init(void){
   OCR3AH = 0x0B;
   OCR3AL = 0xB8;
 
-  DDRE |= (1<<DDE3) | (1<<DDE4) | (1<<DDE5); //Pin E3,4,5 defined as output
-
-  // Enable Overflow interrupt (When clock reaches TOP)
-  // TIMSK5 = (1<<TOIE3);
+  //Pin E3,4,5 defined as output
+  DDRE |= (1<<DDE3) | (1<<DDE4) | (1<<DDE5);
 }
 
 
 void pwm_set_duty_cycle(uint8_t xValue){
   uint16_t dutyCycle = 4200 + xValue*((1800-4200)/255);
-
   if( dutyCycle > 4200 ){
     dutyCycle = 4200;
   }
   else if( dutyCycle < 1800 ){
     dutyCycle = 1800;
   }
-
   // Set duty cycle for Higher and Lower 8 bits
   OCR3AH = (dutyCycle >> 8);
   OCR3AL = dutyCycle;
