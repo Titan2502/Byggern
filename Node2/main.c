@@ -26,7 +26,6 @@
 volatile uint8_t FIRST_CAN_MESSAGE = FALSE;
 volatile uint8_t CAN_MESSAGE_PENDING = FALSE;
 volatile uint8_t PID_CHECK_CORRECTION = FALSE;
-volatile uint8_t GAME_OVER = FALSE;
 volatile uint8_t SCORE = 0;
 volatile uint32_t COUNTER = 0;
 
@@ -52,10 +51,11 @@ int main()
   PID_parameters pid_struct;    // Parameters for the regulator
   interrupt_init(); // Enable interrupt
 
-
+  uint8_t best_score = 0;
+  uint8_t game_status[2] = {FALSE, FALSE};
 
   while(1){
-    printf("SCORE: %d\n",  SCORE);
+    // printf("SCORE: %d\n",  SCORE);
     if(CAN_MESSAGE_PENDING){
       CAN_MESSAGE_PENDING = FALSE;
       msg_receive = can_data_receive();
@@ -63,6 +63,7 @@ int main()
       // Need this so that PID control starts after first CAN message
       if(FIRST_CAN_MESSAGE == FALSE){
         FIRST_CAN_MESSAGE = TRUE;
+        PORTL |= (1<<PL3);
         PID_init_to_winit(msg_receive.data[3], &pid_struct);
       }
 
@@ -77,20 +78,33 @@ int main()
       motor_PID(sliderposition, &pid_struct);
     }
 
-    GAME_OVER = game_get_lives();
-    if(GAME_OVER){
+    game_get_lives(&game_status[0]);
+
+    // If we lost a life, store the best score
+    if(game_status[1]){
+      if(SCORE > best_score){
+        best_score = SCORE;
+      }
+      SCORE = 0;
+      COUNTER = 0;
+    }
+
+    // Do this if GAME OVER
+    if(game_status[0]){
       message_transmit.data[0] = 0;
-      message_transmit.data[1] = SCORE;
+      message_transmit.data[1] = best_score;
       ADCSRA &= ~(1<<ADSC);
       can_message_send(&message_transmit);
       _delay_ms(500);
       CAN_MESSAGE_PENDING = FALSE;
       FIRST_CAN_MESSAGE = FALSE;
+      PORTL &= ~(1<<PL3);   // Indikation for the Arduino for game reset
       game_init(3);   // 3 Lives
       can_init();
       SCORE = 0;
       COUNTER = 0;
     }
+
   }
 }
 
@@ -101,7 +115,7 @@ ISR(INT2_vect){
 ISR(TIMER1_OVF_vect){
   PID_CHECK_CORRECTION = TRUE;
   COUNTER += 1;
-  if(PID_CHECK_CORRECTION && FIRST_CAN_MESSAGE && ((COUNTER % 30) == 0)){
+  if(PID_CHECK_CORRECTION && FIRST_CAN_MESSAGE && ((COUNTER % 31) == 0)){
     SCORE += 1;
   }
 }

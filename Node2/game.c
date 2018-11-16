@@ -14,29 +14,43 @@ game_stats stats;
 
 void game_init(uint8_t lives){
   stats.lives = lives;
+  DDRL	|= (1 << DDL1);
+  DDRL	|= (1 << DDL3);
 }
 
 
-uint8_t game_get_lives(void){
+void game_get_lives(uint8_t *game_status){
+  // int return_temp[2] = {FALSE,FALSE}; // {gameover, not_gameover}
+  game_status[0] = FALSE;
+  game_status[1] = FALSE;
   uint8_t value = adc_ir_read();
   // printf("Value 0x%x\r\n", value);
   // Max 0x8b = 162, Min 0x4 = 4,
   uint8_t trigger_value = 0x40;
   if(value < trigger_value ){
     stats.lives--;
-    printf("You lost a life!\n\rCurrent lives left: %d\n\r", stats.lives);
+    PORTL |= (1<<PL1);
+    printf("You lost a life! Current lives left: %d\n", stats.lives);
+
     if(stats.lives == 0){
-      printf("Out of lives\n\r");
+      printf("Out of lives! ");
       printf("GAME OVER!\n");
-      return TRUE;
+      while(adc_ir_read() < trigger_value);
+      PORTL &= ~(1<<PL1);
+      // return_temp[0] = TRUE;
+      // printf("return_temp, %d \n", return_temp);
+      // return return_temp;
+      game_status[0] = TRUE;
       // CALL SOME KIND OF TERMINATION!!!
     }
 
     _delay_ms(1000);    // For bouncing! 1 sec settling time
-    // Continue until the ball is removed
-    while(adc_ir_read() < trigger_value);
+    while(adc_ir_read() < trigger_value); // Continue until the ball is removed
+    PORTL &= ~(1<<PL1);
+    // return_temp[1] = TRUE;
+    // return return_temp;
+    game_status[1] = TRUE;
   }
-  return FALSE;
 }
 
 void game_solonoid_init(void){
