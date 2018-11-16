@@ -93,7 +93,6 @@ void oled_clearScreen(void){
 //Initialization routine for the OLED
 void oled_init(void)
 {
-	printf("Starting OLED Initializing...\n\r");
 	//Display off
 	oled_write_command(0xAE);
 	//Segment remap
@@ -130,5 +129,4 @@ void oled_init(void)
 	oled_write_command(0xA6);
 	//Display on
 	oled_write_command(0xAF);
-	printf("...OLED Initializing Complete!\n\r");
 }
