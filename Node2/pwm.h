@@ -3,6 +3,6 @@
 #include <stdio.h>
 
 void pwm_init(void);
-void pwm_set_duty_cycle(uint8_t xValue);
+void pwm_set_duty_cycle(uint8_t xValue, uint8_t difficulty);
 
 #endif

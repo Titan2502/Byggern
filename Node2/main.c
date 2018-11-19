@@ -65,7 +65,7 @@ int main()
         PORTL |= (1<<PL3);
         PID_init_to_winit(msg_receive.data[3], &pid_struct);
       }
-      pwm_set_duty_cycle(msg_receive.data[0]);   // map X position to pwm for servo
+      pwm_set_duty_cycle(msg_receive.data[0], msg_receive.data[3]);   // map X position to pwm for servo
       game_solonoid_check(msg_receive.data[2]);  // Check if button is pushed, if so activate
     }
 
@@ -93,6 +93,7 @@ int main()
     if(game_status[0]){
       message_transmit.data[0] = 0;
       message_transmit.data[1] = best_score;
+      best_score = 0;                         // Reset best score for new game
       ADCSRA &= ~(1<<ADSC);                   // ADC Stop Conversion
       can_message_send(&message_transmit);
       _delay_ms(500);
@@ -101,6 +102,7 @@ int main()
       PORTL &= ~(1<<PL3);                     // Indikation for the Arduino for game reset
       game_init(3);                           // Setting lives equal to  3
       can_init();
+
       SCORE = 0;
       COUNTER = 0;
     }

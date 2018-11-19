@@ -34,12 +34,19 @@ void pwm_init(void){
 }
 
 
-void pwm_set_duty_cycle(uint8_t xValue){
-  uint16_t dutyCycle = 4200 + xValue*((1800-4200)/255);
+void pwm_set_duty_cycle(uint8_t xValue, uint8_t difficulty){
+  uint16_t dutyCycle;
+  printf("xValue, %d\n", xValue);
+  if(difficulty == 2){
+    dutyCycle = 1800 + xValue*((4200 -1800)/255);         // Reverted mode - hard difficulty
+  }else{
+    dutyCycle = 4200 + xValue*((1800-4200)/255);
+  }
+  printf("dutyCycle, %d\n", dutyCycle);
+  // Overflow check
   if( dutyCycle > 4200 ){
     dutyCycle = 4200;
-  }
-  else if( dutyCycle < 1800 ){
+  }else if( dutyCycle < 1800 ){
     dutyCycle = 1800;
   }
   // Set duty cycle for Higher and Lower 8 bits

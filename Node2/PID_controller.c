@@ -23,9 +23,9 @@ void PID_init_to_winit(uint8_t difficulty, PID_parameters *pid_struct){
       kd = 0.0;
       break;
     case 2:
-      kp = 0.0002;
-      ki = 0.0;
-      kd = 0.0;
+      kp = 0.022;
+      ki = 0.001;
+      kd = 0.01;
       break;
     default: break;
   }
