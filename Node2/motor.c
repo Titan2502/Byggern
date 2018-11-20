@@ -11,14 +11,25 @@
 
 
 void motor_init(void){
-  cli();
   // Setting pins as output:PH1 = DIR, PH3 = SEL, PH4 = EN, PH5 = -OE, PH6 = RST
   DDRH |= (1<<PH1) | (1<<PH3) | (1<<PH4) | (1<<PH5) | (1<<PH6);
   PORTH |= (1<<PH4) | (1<<PH1);  // Setting Enable pin and direction pin
   motor_reset();
+
+  // Start the motor at the rigth position
+  int16_t current_encoder_value = 0, previous_encoder_value = -1;
+	motor_write(-75);
+	while(current_encoder_value != previous_encoder_value){
+		current_encoder_value = motor_readEncoder();
+		_delay_ms(200);
+		previous_encoder_value = motor_readEncoder();
+	}
+	dac_write(0);
+  motor_reset();
 }
 
 void motor_reset(void){
+  printf("reset\n");
   PORTH &= ~(1<<PH6);
   _delay_us(20);
   PORTH |= (1<<PH6);

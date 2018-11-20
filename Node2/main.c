@@ -36,6 +36,7 @@ int main()
   pwm_init();
   adc_ir_init();
   game_init(3);   // 3 Lives
+  interrupt_init();                         // Enable interrupt
   dac_init();
   motor_init();
   game_solonoid_init();
@@ -51,7 +52,7 @@ int main()
   PID_parameters pid_struct;                // Struct for parameters for the regulator
   uint8_t best_score = 0;                   // Store best score for sending back to Node 1
   uint8_t game_status[2] = {FALSE, FALSE};  // Game_status = {GAME OVER, LOST LIFE}
-  interrupt_init();                         // Enable interrupt
+
 
 
   while(1){

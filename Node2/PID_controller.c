@@ -11,6 +11,7 @@
 
 void PID_init_to_winit(uint8_t difficulty, PID_parameters *pid_struct){
   float kp, ki, kd;
+  printf("Difficulty : %d\n",  difficulty);
   switch (difficulty) {
     case 0: // Easy mode
       kp = 0.022;
@@ -21,6 +22,7 @@ void PID_init_to_winit(uint8_t difficulty, PID_parameters *pid_struct){
       kp = 0.022;
       ki = 0.0;
       kd = 0.0;
+      printf("CASE 1");
       break;
     case 2: // Hard mode (also reverted servo)
       kp = 0.022;
