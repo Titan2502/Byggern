@@ -12,7 +12,6 @@ void dac_init(void){
 }
 
 void dac_write(uint8_t output_byte){
-  // Slave address byte: 0101 0000 | (0000 0111 <<1) = 0101 1110
   uint8_t msg[3] = { MAX520_TWI_ADDR_BASE | (ENCODER_ADDRESS << 1), ENCODER_ADDRESS, output_byte};
   TWI_Start_Transceiver_With_Data(msg, MSG_SIZE);
 }

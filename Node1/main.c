@@ -8,7 +8,7 @@
 #include "F_CPU.h"
 #include "util/delay.h"
 #include "interrupt.h"
-#include "accessing_memory_test.h"
+#include "sram.h"
 #include "adc.h"
 #include "joystick.h"
 #include "rfid_game.h"
@@ -32,7 +32,8 @@ int main()
   USART_Init();
   SRAM_init();
   SRAM_test();  // Reading and writing to the SRAM
-  initMenu(HIGHSCORES);
+  SRAM_writeto(&HIGHSCORES[0]);
+  initMenu();
   interrupt_init();
   can_init();
   init_button();
@@ -61,9 +62,6 @@ int main()
         msg_transmit.data[0] = pos_joy.x;
         msg_transmit.data[1] = pos_slider.right;
         msg_transmit.data[2] = getButton();
-        // printf("Joyposx: %d\n", msg_transmit.data[0]);
-        // printf("slider: %d\n", msg_transmit.data[1]);
-        // printf("button: %d\n", msg_transmit.data[2]);
 
         can_message_send(&msg_transmit);
 
@@ -73,8 +71,10 @@ int main()
           msg_receive = can_data_receive();
           if(msg_receive.data[0] == 0){
             START_GAME = FALSE;
-            printf("CAN MESSAGE RECIEVED - GAME OVER!! VERDI %d\n");
+            printf("CAN MESSAGE RECIEVED - GAME OVER!!\n");
             uint8_t current_highscore = msg_receive.data[1];
+
+            // Sorting the highscore, dropping out the lowest.
             if (current_highscore > HIGHSCORES[0]){
               HIGHSCORES[0] = current_highscore;
             }
@@ -84,7 +84,8 @@ int main()
                 HIGHSCORES[i-1] = temp_hs;
                 HIGHSCORES[i] = current_highscore;
               }
-              initMenu(HIGHSCORES);
+            SRAM_writeto(&HIGHSCORES[0]); //Storing new highscores in SRAM
+            initMenu();
 
             }
           }

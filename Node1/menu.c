@@ -8,6 +8,7 @@
 #include "joystick.h"
 #include "menu.h"
 #include "menu_names.h"
+#include "sram.h"
 
 
 Node newNode(MENU menu){
@@ -25,7 +26,7 @@ Node newNode(MENU menu){
 }
 
 
-void initMenu(volatile uint8_t HIGHSCORES[]){
+void initMenu(void){
   oled_init();
   oled_clearScreen();   // Clear screen, go to pos (0, 0)
   _delay_ms(500);
@@ -53,10 +54,13 @@ void initMenu(volatile uint8_t HIGHSCORES[]){
   HighScores.title = HS_title_string;
   char HS1[16], HS2[16], HS3[16];
 
+  uint8_t HIGHSCORES[3];
+  SRAM_read_highscores(&HIGHSCORES[0]);
+
+  // Converting uint8_t to string
   itoa(HIGHSCORES[0], HS1, 10);
   itoa(HIGHSCORES[1], HS2, 10);
   itoa(HIGHSCORES[2], HS3, 10);
-
 
   HighScores.menu1 = HS3;
   HighScores.menu2 = HS2;
@@ -166,12 +170,3 @@ const char* checkJoystickDirection(){
   }
   return NULL;
 }
-// getCurrentPosOled()
-
-
-// ---- Joystick function ---- //
-// JOY_pos getJoystickAnalogPos(void);
-//
-// SLIDER_pos getSliderAnalogPos(void);
-//
-// JOY_dir_t getJoystickDirection(int deadzone);

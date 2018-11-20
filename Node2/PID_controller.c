@@ -12,17 +12,17 @@
 void PID_init_to_winit(uint8_t difficulty, PID_parameters *pid_struct){
   float kp, ki, kd;
   switch (difficulty) {
-    case 0:
+    case 0: // Easy mode
       kp = 0.022;
       ki = 0.001;
       kd = 0.01;
       break;
-    case 1:
+    case 1: // Medium mode
       kp = 0.022;
       ki = 0.0;
       kd = 0.0;
       break;
-    case 2:
+    case 2: // Hard mode (also reverted servo)
       kp = 0.022;
       ki = 0.001;
       kd = 0.01;
@@ -75,7 +75,7 @@ int16_t PID_controller(int16_t reference, int16_t measurement, PID_parameters *p
 
   // Calculate I-term and limit integral "runaway": Iterm: Ki*integral(error)
   temp = pid_st->sumError + error;
-  if ( error > -5 && error < 5 ){  // && (temp < -INT32_MAX || temp > INT32_MAX)
+  if ( error > -5 && error < 5 ){
     pid_st->sumError = 0;
     temp = 0;
   }

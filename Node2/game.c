@@ -23,7 +23,7 @@ void game_get_lives(uint8_t *game_status){
   game_status[0] = FALSE;
   game_status[1] = FALSE;
   uint8_t value = adc_ir_read();
-  uint8_t trigger_value = 0x20; // For work station 18, trigger_value = 0x40
+  uint8_t trigger_value = 0x20;
   if(value < trigger_value ){
     stats.lives--;
     PORTL |= (1<<PL1);

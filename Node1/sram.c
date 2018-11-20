@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include "uart.h"
+#include "sram.h"
 
 void SRAM_init(void){
   MCUCR |= (1<<SRE);
@@ -47,19 +48,18 @@ void SRAM_test(void){
   printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase\n\n", write_errors, retrieval_errors);
 }
 
+
 void SRAM_writeto(volatile uint8_t *highscores){
-  volatile char *ext_ram = (char *) 0x1900; // Start address for SRAM
+  volatile char *ext_ram = (char *) HIGHSCORES_ADDRESS; // Start address for SRAM
   for (uint8_t i = 0; i < 3; i++) {
     ext_ram[i] = highscores[i];
   }
 }
 
-void SRAM_readfrom(volatile uint8_t *highscores){
-  volatile char *ext_ram = (char *) 0x1900;
-  uint8_t hs_array[3];
+void SRAM_read_highscores(uint8_t *highscores){
+  volatile char *ext_ram = (char *) HIGHSCORES_ADDRESS;
   for (uint8_t i = 0; i < 3; i++){
-    uint8_t retreived_value = ext_ram[i];
-    printf("Retrieved value from SRAM: %d\n", retreived_value);
     highscores[i] = ext_ram[i];
+    printf("Retrieved value from SRAM: %d\n", highscores[i]);
   }
 }

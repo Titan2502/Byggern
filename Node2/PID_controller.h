@@ -5,7 +5,7 @@
 
 #define SCALING_FACTOR  128 //2^7
 
-// MAx values needed to avoid sign/overflow problems
+// Max values needed to avoid sign/overflow problems
 #define MAX_INT16       32767       // (2¹⁵-1)
 #define MAX_INT32       INT32_MAX  // (2³¹-1)
 #define MAX_I_TERM      (MAX_INT32 / 2)
