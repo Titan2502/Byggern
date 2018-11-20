@@ -116,7 +116,7 @@ ISR(INT2_vect){
 ISR(TIMER1_OVF_vect){
   PID_CHECK_CORRECTION = TRUE;
   COUNTER += 1;
-  if(PID_CHECK_CORRECTION && FIRST_CAN_MESSAGE && ((COUNTER % 31) == 0)){
+  if(PID_CHECK_CORRECTION && FIRST_CAN_MESSAGE && ((COUNTER % 31) == 0)){ // sync it up to around 1 sec
     SCORE += 1;
   }
 }

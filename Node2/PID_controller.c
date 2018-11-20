@@ -51,6 +51,7 @@ void PID_timer_enable(void){
   cli();
   TCCR1A = 0x00;      // Normal count mode
   TCCR1B |= (1<<CS11);    // prescaling clk/8
+  // TCCR1B |= (1<<CS11) | (1<<CS10); // prescaling clk/64 too low samplings for PID
   TIMSK1 |= (1<<TOIE1);   // Overflow Interrupt enable
   TIFR1 &= ~(1<<TOV1);
   sei();
