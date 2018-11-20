@@ -67,9 +67,9 @@ int main()
 
         if(CAN_MESSAGE_PENDING){
           CAN_MESSAGE_PENDING = FALSE;
-          ACCESS_STATUS = FALSE;
           msg_receive = can_data_receive();
           if(msg_receive.data[0] == 0){
+            ACCESS_STATUS = FALSE;
             START_GAME = FALSE;
             printf("CAN MESSAGE RECIEVED - GAME OVER!!\n");
             uint8_t current_highscore = msg_receive.data[1];
