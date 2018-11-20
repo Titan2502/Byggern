@@ -127,11 +127,11 @@ void setArrow(int line){
     oled_print(Arrow_string);
     arrowPagePos = line;
   }
-  _delay_ms(300);
+  _delay_ms(300); // Such that the user have time to put joystick to neutral
 }
 
 
-const char* checkJoystickDirection(){
+const char* update_menu(){
   JOY_dir_t joyDirection = getJoystickDirection(50);
   if(joyDirection == UP){
     setArrow(arrowPagePos-1);
@@ -147,21 +147,21 @@ const char* checkJoystickDirection(){
       case 2:
         if(currentNode->child1 != NULL){
           constructMenu(currentNode->child1);
-        }else{
+        }else if ( strcmp(currentNode->menu.menu1, "Easy") == 0 ){
           return currentNode->menu.menu1;
         }
         break;
       case 3:
         if(currentNode->child2 != NULL){
           constructMenu(currentNode->child2);
-        }else{
+        }else if ( strcmp(currentNode->menu.menu2, "Medium") == 0 ){
           return currentNode->menu.menu2;
         }
         break;
       case 4:
         if(currentNode->child3 != NULL){
           constructMenu(currentNode->child3);
-        }else{
+        }else if ( strcmp(currentNode->menu.menu3, "Hard") == 0 ){
           return currentNode->menu.menu3;
         }
         break;

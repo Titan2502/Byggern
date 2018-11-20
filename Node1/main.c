@@ -93,7 +93,7 @@ int main()
       }
 
       else{
-        const char* menuReturned = checkJoystickDirection();
+        const char* menuReturned = update_menu();
         if(menuReturned != NULL){
           if (strcmp(menuReturned, "Easy") == 0){
             msg_transmit.data[3] = 0;

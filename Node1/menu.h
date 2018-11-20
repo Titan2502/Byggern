@@ -27,7 +27,7 @@ void initMenu(void);
 void constructMenu(Node* currentNode);
 void removeArrow(int line);
 void setArrow(int line);
-const char* checkJoystickDirection(void);
+const char* update_menu(void);
 
 uint8_t arrowPagePos;
 Node* currentNode;
