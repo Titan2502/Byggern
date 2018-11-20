@@ -4,20 +4,20 @@
 
 // ---- Main Menu ----
 // const char* MM_title_string = 0x1601
-const char MM_title_string[]  = "Main Menu";
-const char MM_menu1_string[]  = "Play Game";
+const char MM_title_string[]  = "$&Main Menu&$";
+const char MM_menu1_string[]  = "Play Game +*";
 const char MM_menu2_string[]  = "High Scores";
 const char MM_menu3_string[]  = "Settings";
 
 // ---- Sub Menus ----
 // MENU PlayGame;
-const char PG_title_string[]  = "Difficulty";
+const char PG_title_string[]  = "Difficulty+ *";
 const char PG_menu1_string[]  = "Easy";
 const char PG_menu2_string[]  = "Medium";
 const char PG_menu3_string[]  = "Hard";
 
 // MENU HighScores;
-const char HS_title_string[]  = "HighScores";
+const char HS_title_string[]  = "HighScores @";
 
 
 // MENU Settings;

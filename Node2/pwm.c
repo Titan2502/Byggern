@@ -36,13 +36,13 @@ void pwm_init(void){
 
 void pwm_set_duty_cycle(uint8_t xValue, uint8_t difficulty){
   uint16_t dutyCycle;
-  printf("xValue, %d\n", xValue);
+  // printf("xValue, %d\n", xValue);
   if(difficulty == 2){
     dutyCycle = 1800 + xValue*((4200 -1800)/255);         // Reverted mode - hard difficulty
   }else{
     dutyCycle = 4200 + xValue*((1800-4200)/255);
   }
-  printf("dutyCycle, %d\n", dutyCycle);
+  // printf("dutyCycle, %d\n", dutyCycle);
   // Overflow check
   if( dutyCycle > 4200 ){
     dutyCycle = 4200;

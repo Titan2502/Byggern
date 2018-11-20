@@ -61,6 +61,9 @@ int main()
         msg_transmit.data[0] = pos_joy.x;
         msg_transmit.data[1] = pos_slider.right;
         msg_transmit.data[2] = getButton();
+        // printf("Joyposx: %d\n", msg_transmit.data[0]);
+        // printf("slider: %d\n", msg_transmit.data[1]);
+        // printf("button: %d\n", msg_transmit.data[2]);
 
         can_message_send(&msg_transmit);
 
