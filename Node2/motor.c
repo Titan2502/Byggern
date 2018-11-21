@@ -29,7 +29,6 @@ void motor_init(void){
 }
 
 void motor_reset(void){
-  printf("reset\n");
   PORTH &= ~(1<<PH6);
   _delay_us(20);
   PORTH |= (1<<PH6);

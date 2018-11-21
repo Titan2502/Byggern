@@ -71,7 +71,7 @@ int main()
           if(msg_receive.data[0] == 0){
             ACCESS_STATUS = FALSE;
             START_GAME = FALSE;
-            printf("CAN MESSAGE RECIEVED - GAME OVER!!\n");
+            printf("GAME OVER!!\n");
             uint8_t current_highscore = msg_receive.data[1];
 
             // Sorting the highscore, dropping out the lowest.
@@ -105,7 +105,6 @@ int main()
             msg_transmit.data[3] = 2;
             START_GAME = TRUE;
           }
-          printf("%d", msg_transmit.data[3]);
         }
       } // else
     } // if(ACCESS_STATUS)

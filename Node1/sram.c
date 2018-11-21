@@ -60,6 +60,5 @@ void SRAM_read_highscores(uint8_t *highscores){
   volatile char *ext_ram = (char *) HIGHSCORES_ADDRESS;
   for (uint8_t i = 0; i < 3; i++){
     highscores[i] = ext_ram[i];
-    printf("Retrieved value from SRAM: %d\n", highscores[i]);
   }
 }
